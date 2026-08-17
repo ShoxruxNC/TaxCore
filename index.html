@@ -6,8 +6,15 @@
 <title>TaxCore — Moliyaviy va soliq maslahat xizmatlari</title>
 <script>
   (() => {
-    if (location.hash.length <= 1) return;
-    window.__taxcoreInitialHash = location.hash;
+    let initialHash = location.hash;
+    try {
+      const navigation = performance.getEntriesByType?.('navigation')?.[0];
+      const isReload = navigation ? navigation.type === 'reload' : performance.navigation?.type === 1;
+      const savedSection = isReload ? sessionStorage.getItem('taxcore:nearest-section') : '';
+      if (savedSection) initialHash = `#${savedSection}`;
+    } catch (error) {}
+    if (initialHash.length <= 1) return;
+    window.__taxcoreInitialHash = initialHash;
     document.documentElement.classList.add('restoring-anchor');
     if ('scrollRestoration' in history) {
       window.__taxcorePreviousScrollRestoration = history.scrollRestoration;
@@ -487,6 +494,18 @@
   .map-links{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
   .map-links a{padding:9px 13px;border:1px solid rgba(166,195,231,.34);border-radius:6px;color:#fff;font-size:11px;font-weight:700;}
   .map-links a:hover{background:rgba(255,255,255,.08);}
+  .footer-socials{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .footer-socials a{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 11px;
+    border:1px solid rgba(166,195,231,.34);border-radius:8px;
+    color:#fff;font-size:12px;font-weight:700;
+  }
+  .footer-socials a:hover{background:rgba(255,255,255,.08);color:#fff;}
+  .social-icon{width:21px;height:21px;display:grid;place-items:center;position:relative;flex:0 0 21px;color:#fff;}
+  .social-icon.telegram{border-radius:50%;background:#229ed9;font-size:12px;line-height:1;transform:rotate(-18deg);}
+  .social-icon.instagram{border:2px solid #fff;border-radius:6px;}
+  .social-icon.instagram::before{content:"";width:7px;height:7px;border:2px solid #fff;border-radius:50%;}
+  .social-icon.instagram::after{content:"";position:absolute;right:3px;top:3px;width:3px;height:3px;border-radius:50%;background:#fff;}
   .foot-bottom{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:9px;font-size:11.5px;color:#8fa9cf;gap:3px;}
   .foot-bottom strong{color:#eef5ff;font-size:12px;}
   @media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr;gap:42px}.foot-contact{grid-column:1/-1;}}
@@ -870,7 +889,16 @@
 
   @media(max-width:47.999rem){
     body{padding-top:4.25rem;}
-    header{height:4.25rem;}
+    header,
+    header.is-scrolled{
+      height:4.25rem;
+      background:var(--header-surface);
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+      box-shadow:none;
+    }
+    header::after,
+    header.is-scrolled::after{display:none;}
     body > header .wrap,.wrap{padding-inline:clamp(1rem,5vw,1.5rem);}
     body > header .logo{gap:.5rem;}
     body > header .logo-mark{width:3rem;height:2.1rem;}
@@ -907,6 +935,12 @@
       flex:0 0 100%;width:100%;height:auto;max-height:none;overflow:visible;
       scroll-snap-align:start;scroll-snap-stop:always;
     }
+    .pricing-grid .price-card.featured,
+    .pricing-grid .price-card.featured:hover{
+      transform:none!important;
+      border-width:1px;
+      box-shadow:0 14px 30px -26px rgba(29,78,216,.35);
+    }
     .pricing-dots{display:flex;justify-content:center;align-items:center;gap:.6rem;margin-top:1.25rem;}
     .pricing-dot{
       width:.65rem;height:.65rem;padding:0;border:0;border-radius:50%;cursor:pointer;
@@ -937,6 +971,18 @@
     .foot-bottom{padding-top:.5rem;font-size:.68rem;gap:.15rem;}
     .foot-bottom strong{font-size:.72rem;}
   }
+
+  .foot-brand{transform:translateY(10px);}
+  @media(max-width:47.999rem){
+    .foot-brand{transform:translateY(6px);}
+    .footer-socials{margin-top:.65rem;gap:.5rem;flex-wrap:wrap;}
+    .footer-socials a{padding:.45rem .65rem;font-size:.74rem;}
+  }
+  .faq-item.is-closing p{
+    max-height:0!important;
+    opacity:0!important;
+    padding-bottom:0!important;
+  }
 </style>
 </head>
 <body>
@@ -957,10 +1003,6 @@
       <a href="#final-cta">Aloqa</a>
     </nav>
     <div class="header-right">
-      <a class="phone" href="tel:+998978071121">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        +998 97 807 11 21
-      </a>
       <a href="#contact" class="btn btn-primary">
         Konsultatsiya olish
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -973,7 +1015,7 @@
 </header>
 
 <div class="site-scale">
-<section class="hero">
+<section class="hero" id="home">
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
@@ -1319,17 +1361,20 @@
         <div class="footer-contact-list">
           <a href="tel:+998978071121"><span class="contact-icon">☎</span><span>+998 97 807 11 21</span></a>
           <a href="mailto:taxcoreuz@gmail.com"><span class="contact-icon">✉</span><span>taxcoreuz@gmail.com</span></a>
-          <a href="https://t.me/taxcoreuz" target="_blank" rel="noopener"><span class="contact-icon">✈</span><span>@taxcoreuz</span></a>
+        </div>
+        <div class="footer-socials" aria-label="Ijtimoiy tarmoqlar">
+          <a href="https://t.me/taxcoreuz" target="_blank" rel="noopener" aria-label="TaxCore Telegram">
+            <span class="social-icon telegram" aria-hidden="true">➤</span><span>taxcoreuz</span>
+          </a>
+          <a href="https://www.instagram.com/taxcore.uz/" target="_blank" rel="noopener" aria-label="TaxCore Instagram">
+            <span class="social-icon instagram" aria-hidden="true"></span><span>taxcore.uz</span>
+          </a>
         </div>
         <div class="contact-detail">
           <span class="detail-icon">◷</span><strong>Ish vaqti</strong><span>Dushanba – Shanba, 09:00 – 18:00</span>
         </div>
         <div class="contact-detail">
           <span class="detail-icon">●</span><strong>Manzil</strong><span>Toshkent shahri, Yunusobod tumani</span>
-        </div>
-        <div class="map-links">
-          <a href="https://maps.google.com/?q=Yunusobod,Toshkent" target="_blank" rel="noopener">Google Maps</a>
-          <a href="https://yandex.uz/maps/?text=Yunusobod%20Toshkent" target="_blank" rel="noopener">Yandex Maps</a>
         </div>
       </div>
     </div>
@@ -1373,7 +1418,9 @@
         if (target) {
           for (let pass = 0; pass < 3; pass += 1) {
             const offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-            const targetTop = window.scrollY + target.getBoundingClientRect().top - offset;
+            const targetTop = anchorId === 'home'
+              ? 0
+              : window.scrollY + target.getBoundingClientRect().top - offset;
             window.scrollTo(0, Math.max(0, targetTop));
             await nextFrame();
           }
@@ -1392,6 +1439,31 @@
       else window.addEventListener('load', restoreInitialAnchor, { once: true });
       setTimeout(() => pageRoot.classList.remove('restoring-anchor'), 3000);
     }
+
+    const rememberNearestSection = () => {
+      if (pageRoot.classList.contains('restoring-anchor')) return;
+      const sectionIds = ['home','services','why-us','pricing','sectors','faq','final-cta','contact'];
+      const headerHeight = document.querySelector('body > header')?.getBoundingClientRect().height || 0;
+      const referenceY = headerHeight + 16;
+      const visibleSections = sectionIds
+        .map(id => document.getElementById(id))
+        .filter(section => section && section.getClientRects().length && getComputedStyle(section).display !== 'none');
+      if (!visibleSections.length) return;
+      const nearest = visibleSections.reduce((best, section) => {
+        const distance = Math.abs(section.getBoundingClientRect().top - referenceY);
+        const bestDistance = Math.abs(best.getBoundingClientRect().top - referenceY);
+        return distance < bestDistance ? section : best;
+      });
+      try { sessionStorage.setItem('taxcore:nearest-section', nearest.id); } catch (error) {}
+    };
+    let nearestSectionFrame = 0;
+    window.addEventListener('scroll', () => {
+      cancelAnimationFrame(nearestSectionFrame);
+      nearestSectionFrame = requestAnimationFrame(rememberNearestSection);
+    }, { passive: true });
+    window.addEventListener('pagehide', rememberNearestSection);
+    window.addEventListener('beforeunload', rememberNearestSection);
+    rememberNearestSection();
 
     const header = document.querySelector('body > header');
     const navLinks = [...document.querySelectorAll('nav.main-links a')];
@@ -1640,11 +1712,25 @@
 
     document.querySelectorAll('.faq-item').forEach(item => {
       const summary = item.querySelector('summary');
+      const answer = item.querySelector('p');
       summary.addEventListener('click', event => {
         event.preventDefault();
+        if (item.classList.contains('is-closing')) return;
         if (item.open) {
           item.classList.add('is-closing');
-          setTimeout(() => { item.open = false; item.classList.remove('is-closing'); }, 300);
+          let finished = false;
+          const onTransitionEnd = transitionEvent => {
+            if (transitionEvent.propertyName === 'max-height') finishClosing();
+          };
+          const finishClosing = () => {
+            if (finished) return;
+            finished = true;
+            answer?.removeEventListener('transitionend', onTransitionEnd);
+            item.open = false;
+            item.classList.remove('is-closing');
+          };
+          answer?.addEventListener('transitionend', onTransitionEnd);
+          setTimeout(finishClosing, 450);
         } else {
           item.open = true;
         }
