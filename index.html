@@ -394,6 +394,7 @@
   .price-features li::before{content:"✓";position:absolute;left:0;top:0;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:var(--blue-50);color:var(--blue-600);font-size:10px;font-weight:800;}
   .price-button{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border:1px solid #dce5f2;border-radius:7px;background:#fff;color:var(--navy-900);font-size:11.5px;font-weight:800;transition:.2s;}
   .price-button:hover,.featured .price-button{background:var(--blue-600);border-color:var(--blue-600);color:#fff;}
+  .pricing-dots{display:none;}
   @media(max-width:1380px){.pricing-grid{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:560px){.pricing-grid{grid-template-columns:1fr;}.pricing{padding:58px 0;}.price-card{min-height:0;}}
 
@@ -873,14 +874,29 @@
     .hero-ctas .btn{width:100%;justify-content:center;}
     .logos-row{grid-template-columns:repeat(2,minmax(0,1fr));}
     .integration-logo{width:100%;}
-    .hero-visual{grid-template-columns:minmax(0,1fr);gap:.875rem;}
-    .hero-photo{grid-column:auto;height:clamp(17rem,72vw,24rem);}
-    .float-card{min-height:0;width:100%;}
+    .hero-visual{display:none;}
     .metrics{grid-template-columns:minmax(0,1fr);gap:1rem;padding-block:1rem;}
     .metric{justify-content:flex-start;}
+    .metrics .metric:nth-child(2),.metrics .metric:nth-child(5){display:none;}
 
-    .service-grid,.pricing-grid,.sector-grid,.why-grid{grid-template-columns:minmax(0,1fr);}
+    .service-grid,.sector-grid,.why-grid{grid-template-columns:minmax(0,1fr);}
+    .service-grid .service-card:nth-child(3),
+    .service-grid .service-card:nth-child(5),
+    .service-grid .service-card:nth-child(6){display:none;}
     .service-card,.price-card,.sector-card{width:100%;min-height:0;}
+    .pricing-grid{
+      display:flex;grid-template-columns:none;gap:.875rem;width:100%;max-width:none;
+      overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    }
+    .pricing-grid::-webkit-scrollbar{display:none;}
+    .pricing-grid .price-card{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;}
+    .pricing-dots{display:flex;justify-content:center;align-items:center;gap:.6rem;margin-top:1.25rem;}
+    .pricing-dot{
+      width:.65rem;height:.65rem;padding:0;border:0;border-radius:50%;cursor:pointer;
+      background:#c7d0e0;box-shadow:none;transition:width .2s ease,background .2s ease;
+    }
+    .pricing-dot.active{width:1.75rem;border-radius:999px;background:var(--blue-600);}
     .sec-head h2,.faq-head h2{font-size:clamp(1.65rem,7.5vw,2rem);}
     .sec-eyebrow{font-size:.95rem;}
     .cta-inner{padding:2rem 1.25rem;}
@@ -1134,6 +1150,12 @@
         <a href="#contact" class="price-button">Mutaxassis bilan gaplashish</a>
       </article>
     </div>
+    <div class="pricing-dots" aria-label="Tarif slaydlari">
+      <button class="pricing-dot active" type="button" data-slide="0" aria-label="Start tarifi" aria-current="true"></button>
+      <button class="pricing-dot" type="button" data-slide="1" aria-label="Standart tarifi" aria-current="false"></button>
+      <button class="pricing-dot" type="button" data-slide="2" aria-label="Business tarifi" aria-current="false"></button>
+      <button class="pricing-dot" type="button" data-slide="3" aria-label="Pro tarifi" aria-current="false"></button>
+    </div>
   </div>
 </section>
 
@@ -1363,6 +1385,41 @@
       if (event.matches) closeMenu();
     });
     const sectionLinks = navLinks.filter(link => link.getAttribute('href')?.startsWith('#') && link.getAttribute('href').length > 1);
+    const pricingCarousel = document.querySelector('.pricing-grid');
+    const pricingCards = [...document.querySelectorAll('.pricing-grid .price-card')];
+    const pricingDots = [...document.querySelectorAll('.pricing-dot')];
+    const mobilePricing = matchMedia('(max-width: 47.999rem)');
+    let pricingFrame = 0;
+    const setActivePricingDot = index => {
+      pricingDots.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle('active', active);
+        dot.setAttribute('aria-current', String(active));
+      });
+    };
+    const syncPricingDots = () => {
+      if (!pricingCarousel || !mobilePricing.matches) return;
+      const carouselLeft = pricingCarousel.getBoundingClientRect().left;
+      const activeIndex = pricingCards.reduce((bestIndex, card, index) => {
+        const currentDistance = Math.abs(card.getBoundingClientRect().left - carouselLeft);
+        const bestDistance = Math.abs(pricingCards[bestIndex].getBoundingClientRect().left - carouselLeft);
+        return currentDistance < bestDistance ? index : bestIndex;
+      }, 0);
+      setActivePricingDot(activeIndex);
+    };
+    pricingCarousel?.addEventListener('scroll', () => {
+      cancelAnimationFrame(pricingFrame);
+      pricingFrame = requestAnimationFrame(syncPricingDots);
+    }, { passive: true });
+    pricingDots.forEach((dot, index) => dot.addEventListener('click', () => {
+      const card = pricingCards[index];
+      if (!pricingCarousel || !card) return;
+      const left = pricingCarousel.scrollLeft + card.getBoundingClientRect().left - pricingCarousel.getBoundingClientRect().left;
+      pricingCarousel.scrollTo({ left, behavior: 'smooth' });
+    }));
+    mobilePricing.addEventListener?.('change', syncPricingDots);
+    window.addEventListener('resize', syncPricingDots, { passive: true });
+    syncPricingDots();
     const surfaceClasses = ['surface-hero','surface-white','surface-soft'];
     const surfaceBySection = {
       services: 'surface-soft',
