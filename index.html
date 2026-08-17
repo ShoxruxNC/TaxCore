@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxCore — Moliyaviy va soliq maslahat xizmatlari</title>
+<script>
+  (() => {
+    if (location.hash.length <= 1) return;
+    window.__taxcoreInitialHash = location.hash;
+    document.documentElement.classList.add('restoring-anchor');
+    if ('scrollRestoration' in history) {
+      window.__taxcorePreviousScrollRestoration = history.scrollRestoration;
+      history.scrollRestoration = 'manual';
+    }
+    try {
+      const cleanUrl = new URL(location.href);
+      cleanUrl.hash = '';
+      history.replaceState(history.state, '', cleanUrl.href);
+    } catch (error) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0b1f4d;
+    --navy-800:#0f2b63;
+    --blue-600:#1d4ed8;
+    --blue-500:#2563eb;
+    --blue-50:#eef3fd;
+    --ink:#0e1b33;
+    --slate-500:#5b6779;
+    --slate-300:#c7d0e0;
+    --line:#e7ebf3;
+    --bg:#f7f9fd;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html.restoring-anchor body{visibility:hidden;}
+  body{
+    margin:0;
+    padding-top:82.5px;
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    zoom:1;
+    overflow-x:hidden;
+  }
+  /* Tabiiy 100% layout: umumiy transform scale ishlatilmaydi. */
+  .site-scale{
+    width:100%;
+    transform:none;
+    display:flex;
+    flex-direction:column;
+  }
+  .site-scale>.hero{order:1;}
+  .site-scale>.services{order:2;}
+  .site-scale>.pricing{order:3;}
+  .site-scale>.why-us{order:4;}
+  .site-scale>.sectors{order:5;}
+  .site-scale>.faq{order:6;}
+  .site-scale>.cta-band{order:7;}
+  .site-scale>footer{order:8;}
+  #services{scroll-margin-top:79px;}
+  #pricing,#why-us,#sectors,#faq,#final-cta,#contact{scroll-margin-top:82.5px;}
+  #services:target,#pricing:target,#why-us:target,#sectors:target,#faq:target{min-height:calc(100vh - 82.5px);}
+  /* Header transformdan tashqarida: matn tiniq, sticky holati barqaror. */
+  body > header .wrap{max-width:1800px;padding-left:50px;padding-right:50px;}
+  body > header .nav-inner{
+    height:100%;position:relative;
+  }
+  body > header .logo{gap:12.5px;}
+  body > header .nav-inner > .logo{margin-left:0;transform:translateX(128px);}
+  body > header .logo-mark{width:69.3px;height:47.25px;border-radius:0;}
+  body > header .logo-text{display:flex;align-items:center;height:47.25px;line-height:1;}
+  body > header .logo-text .name{font-size:31.5px;line-height:1;font-weight:800;letter-spacing:-0.6px;}
+  body > header .logo-text .tag{font-size:11.875px;letter-spacing:1.75px;}
+  body > header nav.main-links{
+    position:absolute;left:50%;transform:translateX(-50%);gap:31px;
+  }
+  body > header nav.main-links a{font-size:16px;padding:7.5px 0;}
+  body > header .header-right{gap:27.5px;}
+  body > header .phone{gap:10px;font-size:18.125px;}
+  body > header .phone svg{width:21.25px;height:21.25px;}
+  body > header .btn{gap:10px;font-size:18.125px;padding:15px 25px;border-radius:11.25px;}
+  body > header .btn svg{width:18.75px;height:18.75px;}
+  h1,h2,h3,.display{
+    font-family:'Manrope',system-ui,sans-serif;
+  }
+  a{text-decoration:none;color:inherit;}
+  .wrap{max-width:1800px;margin:0 auto;padding:0 50px;}
+  @media(max-width:640px){.wrap{padding:0 22px;}}
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;width:100%;z-index:1000;
+    height:82.5px;
+    --header-surface:rgba(251,252,255,.97);
+    background:var(--header-surface);
+    backdrop-filter:none;
+    border-bottom:0;
+  }
+  header::after{
+    content:"";position:absolute;z-index:0;left:0;right:0;top:0;bottom:-20px;
+    pointer-events:none;opacity:0;
+    background:linear-gradient(180deg,var(--header-surface) 0%,var(--header-surface) 72%,transparent 100%);
+    transition:opacity .32s ease,background .32s ease;
+  }
+  body > header .nav-inner{z-index:1;}
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:66px;
+  }
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-mark{
+    width:58px;height:40px;border-radius:0;
+    background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;flex-shrink:0;
+  }
+  .logo-mark img{width:100%;height:100%;object-fit:contain;display:block;}
+  .logo-text{line-height:1.05;}
+  .logo-text .name{font-family:'Manrope',system-ui,sans-serif;font-weight:800;font-size:17px;letter-spacing:0.2px;color:var(--navy-900);}
+  .logo-text .tag{font-size:9.5px;letter-spacing:1.4px;color:var(--slate-500);font-weight:600;}
+  nav.main-links{display:flex;gap:30px;align-items:center;}
+  nav.main-links a{
+    font-size:14.5px;font-weight:600;color:#3a4356;
+    padding:6px 0;border-bottom:2px solid transparent;
+    transition:color .2s;
+  }
+  nav.main-links a.active{color:var(--blue-600);border-color:var(--blue-600);background:transparent;box-shadow:none;}
+  nav.main-links a:hover{color:var(--blue-600);background:transparent;}
+  .header-right{display:flex;align-items:center;gap:22px;}
+  .phone{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;color:var(--navy-900);}
+  .phone svg{width:17px;height:17px;color:var(--blue-600);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-weight:700;font-size:14.5px;
+    padding:12px 20px;border-radius:9px;
+    cursor:pointer;border:none;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--blue-600);color:#fff;box-shadow:0 8px 18px -6px rgba(29,78,216,.5);}
+  .btn-primary:hover{background:#1a43c4;transform:translateY(-1px);}
+  .btn svg{width:15px;height:15px;}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;}
+  @media(max-width:1080px){
+    nav.main-links{display:none;}
+    .phone{display:none;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:linear-gradient(180deg,#fbfcff 0%, var(--bg) 100%);
+    overflow:hidden;
+    padding:10px 0 30px;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:center;
+  }
+  .hero-copy{padding-left:112px;}
+  .eyebrow{
+    display:flex;gap:8px;align-items:center;
+    font-size:11px;font-weight:700;letter-spacing:1.4px;
+    color:var(--blue-600);text-transform:uppercase;margin-bottom:14px;
+  }
+  .eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--slate-300);}
+  .hero h1{
+    font-size:42px;line-height:1.08;font-weight:800;letter-spacing:-1.3px;
+    color:var(--navy-900);margin:0 0 16px;
+  }
+  .hero h1 .accent{color:var(--blue-600);}
+  .hero p.lead{
+    font-size:14.5px;line-height:1.6;color:var(--slate-500);
+    max-width:430px;margin:0 0 24px;
+  }
+  .hero-ctas{display:flex;align-items:center;gap:20px;margin-bottom:30px;flex-wrap:wrap;}
+  .trusted-label{font-size:11.5px;color:var(--slate-500);font-weight:600;margin-top:8px;margin-bottom:12px;}
+  .logos-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-width:480px;}
+  .integration-logo{height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:6px;border:1px solid rgba(215,224,238,.9);border-radius:13px;background:rgba(255,255,255,.9);box-shadow:0 8px 20px -18px rgba(11,31,77,.3);}
+  .integration-logo img{width:100%;height:100%;display:block;object-fit:contain;object-position:center;filter:contrast(1.28) saturate(1.22);}
+  .integration-logo.didox img{transform:scale(1.7);filter:brightness(.65) contrast(3.4) saturate(3) hue-rotate(45deg);}
+  .integration-logo.bank img{transform:scale(.94);}
+  @media(max-width:560px){.logos-row{grid-template-columns:repeat(2,1fr);max-width:none}.integration-logo{height:46px;}}
+
+  /* hero visual */
+  .hero-visual{
+    position:relative;height:520px;
+    display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:12px;
+    padding-top:16px;
+  }
+  .hero-photo{
+    position:absolute;right:-40px;top:16px;bottom:0;left:110px;
+    border-radius:20px;overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(11,31,77,.35);
+  }
+  .hero-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .float-card{
+    position:relative;left:0;width:212px;z-index:2;
+    background:rgba(18,55,105,.68);
+    border-radius:13.3px;
+    padding:15.2px 15.2px 30px;
+    box-shadow:0 16px 34px -16px rgba(11,42,82,.2);
+    border:1px solid rgba(87,126,173,.18);
+  }
+  .float-card .fc-icon{
+    width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.92);
+    display:flex;align-items:center;justify-content:center;margin-bottom:11px;
+  }
+  .float-card .fc-icon svg{width:18px;height:18px;color:var(--blue-600);}
+  .float-card h4{font-size:17px;font-weight:800;color:#fff;margin:0 0 7px;letter-spacing:-.3px;line-height:1.2;}
+  .float-card p{font-size:11.5px;color:#c9d7ea;line-height:1.45;margin:0;}
+  .float-card .fc-arrow{
+    width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.92);
+    display:flex;align-items:center;justify-content:center;color:var(--blue-600);
+    transition:background .2s;
+  }
+  .float-card .fc-arrow svg{width:12px;height:12px;}
+  .float-card:hover .fc-arrow{background:var(--blue-600);color:#fff;}
+  .fc-1{top:0;}
+  .fc-2{top:7px;}
+  .fc-3{top:14px;}
+
+  .stats-card{
+    position:absolute;right:0;bottom:30px;width:212px;
+    background:linear-gradient(165deg,var(--navy-900),#0a1638);
+    border-radius:16px;color:#fff;
+    padding:20px 18px;
+    box-shadow:0 25px 50px -15px rgba(6,14,40,.55);
+  }
+  .stats-card .sc-label{
+    font-size:9.5px;font-weight:700;letter-spacing:1.2px;
+    color:#9db1e8;margin-bottom:13px;text-transform:uppercase;
+  }
+  .stat-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);}
+  .stat-row:first-of-type{border-top:none;}
+  .stat-row .si{
+    width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.08);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .stat-row .si svg{width:14px;height:14px;color:#fff;}
+  .stat-row .sv{font-size:15px;font-weight:800;letter-spacing:-.3px;}
+  .stat-row .sl{font-size:10.5px;color:#aab7db;font-weight:500;margin-top:1px;}
+
+  @media(max-width:1080px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-copy{padding-left:0;}
+    .hero h1{font-size:42px;}
+    .hero-visual{height:auto;margin-top:20px;padding-top:0;}
+    .hero-photo{position:relative;left:0;right:0;top:0;height:340px;border-radius:18px;}
+    .float-card{position:relative;top:auto !important;width:100%;margin-bottom:14px;}
+    .stats-card{position:relative;right:auto;bottom:auto;width:100%;margin-top:14px;}
+  }
+
+  /* ---------- Metrics bar ---------- */
+  .metrics{
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    margin:30px 0 0;padding:18px 10px;
+    box-shadow:0 12px 28px -24px rgba(15,25,60,.12);
+    display:grid;grid-template-columns:repeat(5,1fr);
+  }
+  .metric{
+    display:flex;gap:12px;align-items:center;padding:0 18px;
+    border-right:1px solid var(--line);
+  }
+  .metric:last-child{border-right:none;}
+  .metric .mi{
+    width:40px;height:40px;border-radius:10px;background:var(--blue-50);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .metric .mi svg{width:19px;height:19px;color:var(--blue-600);}
+  .metric .mv{font-size:18px;font-weight:800;color:var(--navy-900);letter-spacing:-.4px;}
+  .metric .ml{font-size:11.5px;color:var(--slate-500);line-height:1.35;margin-top:2px;font-weight:500;}
+  @media(max-width:1080px){
+    .metrics{grid-template-columns:repeat(2,1fr);gap:24px 0;border-radius:16px;}
+    .metric{border-right:none;padding:0 8px;}
+  }
+
+  /* ---------- Services ---------- */
+  .services{padding:64px 0 70px;background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);}
+  .sec-head{display:flex;justify-content:center;align-items:center;margin-bottom:32px;gap:20px;flex-wrap:wrap;text-align:center;}
+  .sec-head>div{width:100%;}
+  .sec-head h2{font-size:27px;font-weight:800;letter-spacing:-.8px;color:var(--navy-900);margin:0;}
+  .sec-eyebrow{font-size:17px;font-weight:800;letter-spacing:1.8px;color:var(--blue-600);text-transform:uppercase;margin-bottom:10px;}
+  .all-link{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--blue-600);}
+  .all-link svg{width:14px;height:14px;}
+
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;max-width:1160px;margin:0 auto;}
+  .service-card{
+    border:1px solid var(--line);border-radius:14px;padding:20px 18px;
+    transition:box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+    background:#fff;min-height:184px;
+  }
+  .service-card:nth-child(1){order:1;}
+  .service-card:nth-child(4){order:2;}
+  .service-card:nth-child(6){order:3;}
+  .service-card:nth-child(2){order:4;}
+  .service-card:nth-child(3){order:5;}
+  .service-card:nth-child(5){order:6;}
+  .service-card:hover{box-shadow:0 20px 40px -22px rgba(15,25,60,.25);transform:translateY(-3px);border-color:#cbdcf3;}
+  .service-card .svi{
+    width:38px;height:38px;border-radius:10px;background:var(--blue-50);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  }
+  .service-card .svi svg{width:19px;height:19px;color:var(--blue-600);}
+  .service-card h3{font-size:14.5px;font-weight:800;color:var(--navy-900);margin:0 0 8px;letter-spacing:-.2px;}
+  .service-card p{font-size:12px;color:var(--slate-500);line-height:1.5;margin:0 0 14px;}
+  .card-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--blue-600);}
+  .card-link svg{width:13px;height:13px;transition:transform .2s;}
+  .service-card:hover .card-link svg{transform:translateX(3px);}
+  .service-modal{
+    width:min(640px,calc(100vw - 32px));max-height:min(720px,calc(100vh - 32px));
+    padding:0;border:0;border-radius:20px;background:#fff;color:var(--navy-900);
+    box-shadow:0 32px 90px rgba(5,23,55,.3);overflow:hidden;
+  }
+  .service-modal::backdrop{background:rgba(5,20,48,.56);backdrop-filter:blur(5px);}
+  .service-modal[open]{animation:service-modal-in .26s ease both;}
+  @keyframes service-modal-in{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+  .service-modal-head{position:relative;padding:30px 68px 24px;background:linear-gradient(135deg,#0d2b59,#2359c8);color:#fff;text-align:center;}
+  .service-modal h3{font-size:26px;line-height:1.2;letter-spacing:-.55px;margin:0 0 11px;text-align:center;}
+  .service-modal-intro{font-size:14px;line-height:1.62;color:#dce8ff;margin:0 auto;max-width:510px;text-align:center;}
+  .service-modal-close{position:absolute;right:20px;top:20px;width:36px;height:36px;border:1px solid rgba(255,255,255,.28);border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:24px;line-height:1;cursor:pointer;transition:.2s;}
+  .service-modal-close:hover{background:rgba(255,255,255,.2);transform:rotate(4deg);}
+  .service-modal-body{padding:25px 30px 28px;overflow:auto;max-height:460px;}
+  .service-modal-body h4{font-size:14px;margin:0 0 14px;color:var(--navy-900);}
+  .service-modal-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;list-style:none;padding:0;margin:0 0 22px;}
+  .service-modal-list li{position:relative;padding-left:23px;font-size:13.5px;line-height:1.5;color:var(--slate-500);}
+  .service-modal-list li::before{content:'✓';position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:var(--blue-50);color:var(--blue-600);font-size:10px;font-weight:900;}
+  .service-modal-result{padding:15px 17px;border:1px solid #dbe6f5;border-radius:11px;background:var(--blue-50);font-size:13.5px;line-height:1.58;color:var(--navy-900);}
+  .service-modal-result strong{color:var(--blue-600);}
+  .service-modal-actions{display:flex;justify-content:flex-end;margin-top:20px;}
+  .service-modal-actions .btn{font-size:13px;padding:11px 17px;}
+  @media(max-width:560px){
+    .service-modal{width:calc(100vw - 20px);max-height:calc(100vh - 20px);border-radius:15px;}
+    .service-modal-head{padding:25px 56px 21px}.service-modal h3{font-size:22px}.service-modal-close{right:14px;top:14px}
+    .service-modal-body{padding:21px;max-height:calc(100vh - 190px)}.service-modal-list{grid-template-columns:1fr}.service-modal-actions .btn{width:100%;justify-content:center}
+  }
+  @media(max-width:1080px){
+    .service-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:560px){.service-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Why us ---------- */
+  .why-us{padding:64px 0 88px;background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);}
+  .why-section-label{text-align:center;margin-bottom:28px;}
+  .why-section-label .sec-eyebrow{margin:0;}
+  .why-layout{display:grid;grid-template-columns:.82fr 1.18fr;gap:88px;align-items:center;max-width:980px;margin:0 auto;}
+  .why-copy{text-align:center;}
+  .why-copy .sec-eyebrow{margin-bottom:14px;}
+  .why-copy h2{font-size:29px;line-height:1.16;font-weight:800;letter-spacing:-.8px;color:var(--navy-900);margin:0 auto 18px;max-width:390px;}
+  .why-copy p{font-size:14px;line-height:1.65;color:var(--slate-500);margin:0 auto;max-width:390px;}
+  .why-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+  .why-card{
+    position:relative;overflow:hidden;min-height:54px;padding:16px 18px;
+    border:1px solid #d8e5f5;border-radius:8px;
+    background:var(--bg);
+    display:flex;align-items:center;text-align:left;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  .why-card:hover{transform:translateX(4px);box-shadow:0 16px 32px -24px rgba(15,43,88,.3);border-color:#b8cdea;}
+  .why-card h3{font-size:13px;font-weight:600;color:var(--navy-900);margin:0;}
+  @media(max-width:900px){.why-layout{grid-template-columns:1fr;gap:34px;max-width:none;}.why-copy h2,.why-copy p{max-width:620px;}}
+  @media(max-width:560px){.why-us{padding:54px 0;}.why-copy h2{font-size:25px;}}
+
+  /* ---------- Pricing ---------- */
+  .pricing{background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);padding:76px 0 92px;}
+  .pricing .sec-head{margin-bottom:34px;}
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch;max-width:1120px;margin:0 auto;}
+  .price-card{
+    position:relative;display:flex;flex-direction:column;min-height:400px;
+    padding:25px 20px 20px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;box-shadow:0 18px 40px -30px rgba(15,35,70,.28);
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  .price-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px -28px rgba(15,35,70,.36);}
+  .price-card.featured{border:1.5px solid var(--blue-600);box-shadow:0 22px 46px -25px rgba(29,78,216,.4);}
+  .price-badge{position:absolute;right:16px;top:16px;padding:5px 9px;border-radius:5px;background:var(--blue-600);color:#fff;font-size:9px;font-weight:800;}
+  .price-card h3{font-size:20px;font-weight:800;color:var(--navy-900);margin:0 0 12px;}
+  .price-intro{font-size:11.5px;line-height:1.55;color:var(--slate-500);margin:0;min-height:48px;}
+  .price-divider{height:1px;background:var(--line);margin:17px 0 18px;}
+  .price-line{display:flex;align-items:baseline;gap:6px;flex-wrap:nowrap;margin-bottom:22px;white-space:nowrap;}
+  .price{font-family:'Manrope',system-ui,sans-serif;font-size:25px;font-weight:800;color:var(--navy-900);letter-spacing:-.7px;white-space:nowrap;}
+  .price-period{font-size:11px;color:var(--slate-500);margin:0;flex-shrink:0;}
+  .price-features{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:14px;}
+  .price-features li{position:relative;padding-left:26px;font-size:11.5px;line-height:1.5;color:#46556d;}
+  .price-features li::before{content:"✓";position:absolute;left:0;top:0;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:var(--blue-50);color:var(--blue-600);font-size:10px;font-weight:800;}
+  .price-button{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border:1px solid #dce5f2;border-radius:7px;background:#fff;color:var(--navy-900);font-size:11.5px;font-weight:800;transition:.2s;}
+  .price-button:hover,.featured .price-button{background:var(--blue-600);border-color:var(--blue-600);color:#fff;}
+  @media(max-width:1380px){.pricing-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.pricing-grid{grid-template-columns:1fr;}.pricing{padding:58px 0;}.price-card{min-height:0;}}
+
+  /* ---------- Sectors ---------- */
+  .sectors{background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);padding:70px 0 84px;}
+  .sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .sector-card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:22px 20px;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  .sector-card:hover{transform:translateY(-3px);box-shadow:0 20px 40px -22px rgba(15,25,60,.25);border-color:#cbdcf3;}
+  .sector-card h3{font-size:14.5px;font-weight:800;color:var(--navy-900);margin:0 0 7px;}
+  .sector-card p{font-size:12px;color:var(--slate-500);line-height:1.5;margin:0;}
+  @media(max-width:900px){.sector-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.sector-grid{grid-template-columns:1fr;}}
+
+  /* ---------- FAQ ---------- */
+  .faq{padding:76px 0 84px;background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);}
+  .faq-head{text-align:center;margin-bottom:34px;}
+  .faq-head h2{font-size:29px;font-weight:800;letter-spacing:-.8px;color:var(--navy-900);margin:0 0 10px;}
+  .faq-head p{font-size:13px;color:var(--slate-500);margin:0;}
+  .faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 16px;max-width:980px;margin:0 auto;align-items:start;}
+  .faq-item{background:#fff;border:1px solid #e4ebf5;border-radius:9px;box-shadow:0 14px 30px -26px rgba(14,40,80,.35);overflow:hidden;}
+  .faq-item summary{position:relative;min-height:58px;padding:18px 54px 18px 18px;display:flex;align-items:center;cursor:pointer;list-style:none;font-size:13px;font-weight:700;color:var(--navy-900);}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+";position:absolute;right:17px;top:50%;transform:translateY(-50%);width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--blue-50);color:var(--blue-600);font-size:16px;font-weight:700;transition:.2s;}
+  .faq-item[open] summary::after{content:"−";background:var(--blue-600);color:#fff;}
+  .faq-item p{padding:0 54px 18px 18px;margin:0;font-size:11.5px;line-height:1.65;color:var(--slate-500);}
+  .faq-item[open]{border-color:#cbdcf3;box-shadow:0 18px 36px -26px rgba(14,40,80,.42);}
+  @media(max-width:760px){.faq-grid{grid-template-columns:1fr;}.faq{padding:58px 0 68px;}.faq-head h2{font-size:25px;}}
+
+  /* ---------- CTA ---------- */
+  .cta-band{
+    margin:70px auto 48px;max-width:1440px;padding:0 40px;
+  }
+  .cta-inner{
+    background:linear-gradient(120deg,var(--navy-900),#12306e 60%,var(--blue-600));
+    border-radius:22px;padding:48px 50px;
+    display:flex;justify-content:space-between;align-items:center;gap:30px;
+    color:#fff;position:relative;overflow:hidden;
+  }
+  .cta-inner::after{
+    content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+    background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);
+  }
+  .cta-inner h2{font-size:24px;font-weight:800;letter-spacing:-.6px;margin:0 0 8px;max-width:480px;}
+  .cta-inner p{font-size:13.5px;color:#c7d3f2;margin:0;max-width:440px;}
+  .btn-light{background:#fff;color:var(--navy-900);}
+  .btn-light:hover{background:#eef3fd;}
+  .cta-form{position:relative;z-index:2;width:340px;flex:0 0 340px;padding:16px;background:#fff;border:1px solid rgba(255,255,255,.72);border-radius:14px;box-shadow:0 20px 42px -24px rgba(4,20,55,.5);display:grid;gap:9px;}
+  .cta-form h3{margin:0 0 2px;color:var(--navy-900);font-size:14px;font-weight:800;letter-spacing:-.2px;}
+  .cta-form input{width:100%;height:40px;padding:0 12px;border:1px solid #dce5f2;border-radius:8px;background:#f8faff;color:var(--navy-900);font:500 12px 'Inter',system-ui,sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
+  .cta-form input:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+  .cta-form input::placeholder{color:#8793a8;}
+  .cta-form button{width:100%;justify-content:center;padding:11px 15px;font-size:12px;}
+  .cta-form button:disabled{cursor:wait;opacity:.72;transform:none;}
+  .form-status{display:none;margin:2px 0 0;padding:9px 10px;border-radius:8px;font-size:11px;font-weight:650;line-height:1.45;}
+  .form-status.success{display:block;background:#eaf8f0;color:#17633b;border:1px solid #c9ead8;}
+  .form-status.error{display:block;background:#fff0f0;color:#9b2c2c;border:1px solid #f2cccc;}
+  @media(max-width:800px){
+    .cta-inner{flex-direction:column;align-items:flex-start;padding:44px 30px;}
+    .cta-form{width:100%;flex-basis:auto;}
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background-color:#0b2850;color:#d6e2f5;padding:22px 0 10px;margin-top:0;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(145deg,#0a2345,#0c2d58);
+    background-size:34px 34px,34px 34px,100% 100%;
+  }
+  .foot-grid{display:grid;grid-template-columns:1.05fr .75fr 1.35fr;gap:72px;padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,.12);}
+  .foot-brand .logo{display:inline-flex;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,.96);}
+  .foot-brand .logo-mark{width:48px;height:34px;}
+  .foot-brand .logo-text .name{color:var(--navy-900)!important;font-size:18px;}
+  .foot-brand .logo-text .tag{color:#61708b!important;font-size:8px;}
+  .foot-brand p{font-size:13px;line-height:1.5;color:#d6e2f5;max-width:300px;margin:12px 0 0;}
+  footer h5{font-size:12.5px;font-weight:800;color:#fff;letter-spacing:.15px;text-transform:none;margin:0 0 12px;}
+  footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+  footer a{font-size:13px;color:#d6e2f5;transition:color .2s,transform .2s;}
+  footer a:hover{color:#fff;}
+  .footer-contact-list{display:grid;gap:7px;margin-bottom:12px;}
+  .footer-contact-list a{display:flex;align-items:center;gap:9px;color:#fff;font-size:13px;font-weight:650;}
+  .footer-contact-list a:hover{color:#9fc2f5;}
+  .footer-contact-list .contact-icon{width:17px;color:#7fb0f2;text-align:center;flex:0 0 17px;}
+  .contact-detail{display:grid;grid-template-columns:18px 1fr;gap:2px 8px;margin:8px 0;color:#fff;}
+  .contact-detail .detail-icon{grid-row:1/3;color:#7fb0f2;font-size:13px;padding-top:1px;}
+  .contact-detail strong{font-size:10.5px;text-transform:uppercase;color:#a9c2e5;letter-spacing:.35px;}
+  .contact-detail span{font-size:12.5px;line-height:1.45;color:#fff;}
+  .map-links{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+  .map-links a{padding:9px 13px;border:1px solid rgba(166,195,231,.34);border-radius:6px;color:#fff;font-size:11px;font-weight:700;}
+  .map-links a:hover{background:rgba(255,255,255,.08);}
+  .foot-bottom{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:9px;font-size:11.5px;color:#8fa9cf;gap:3px;}
+  .foot-bottom strong{color:#eef5ff;font-size:12px;}
+  @media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr;gap:42px}.foot-contact{grid-column:1/-1;}}
+  @media(max-width:560px){.foot-grid{grid-template-columns:1fr;padding-left:0;padding-right:0}.foot-contact{grid-column:auto}}
+
+  /* ---------- Premium motion system ---------- */
+  header,.nav-inner,.logo-mark,.logo-text,.logo-text .name,.main-links a,.phone,.header-right .btn{transition:height .32s ease,transform .32s ease,box-shadow .32s ease,background .32s ease,font-size .32s ease,padding .32s ease;}
+  header.is-scrolled{
+    height:62px;
+    background:transparent;
+    backdrop-filter:none;
+    box-shadow:none;
+  }
+  header.is-scrolled::after{opacity:1;}
+  header.surface-hero{--header-surface:rgba(251,252,255,.97);}
+  header.surface-white{--header-surface:rgba(255,255,255,.97);}
+  header.surface-soft{--header-surface:rgba(247,249,253,.97);}
+  body > header.is-scrolled .nav-inner{height:100%;}
+
+  .hero-photo::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(115deg,rgba(9,39,82,.12),transparent 42%,rgba(5,26,58,.18));}
+  .hero-photo img{transform:translate3d(var(--hero-x,0),var(--hero-y,0),0) scale(1.035);transition:transform .5s cubic-bezier(.2,.7,.2,1);will-change:transform;}
+  .float-card{animation:soft-float 8s ease-in-out infinite;will-change:transform;}
+  .float-card:nth-of-type(3),.float-card:nth-of-type(4){animation-delay:0s;}
+  @keyframes soft-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+
+  .reveal-pending{opacity:0;transform:translateY(18px);transition:opacity .42s ease,transform .42s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms);}
+  .reveal-pending.revealed{opacity:1;transform:translateY(0);}
+
+  .price-card.featured{transform:scale(1.02);z-index:2;}
+  .price-card.featured:hover{transform:scale(1.02) translateY(-4px);}
+  .service-card .svi{transition:background .25s ease,transform .25s ease;}
+  .service-card:hover .svi{background:#dce9ff;transform:translateY(-3px) rotate(-2deg);}
+  .service-card:hover .svi svg{transform:scale(1.08);}
+  .service-card .svi svg{transition:transform .25s ease;}
+
+  .services,.pricing,.why-us,.sectors,.faq{position:relative;isolation:isolate;overflow:hidden;}
+  .services::before,.why-us::before,.sectors::before{content:"";position:absolute;z-index:-1;width:420px;height:420px;border-radius:50%;filter:blur(12px);pointer-events:none;background:radial-gradient(circle,rgba(37,99,235,.055),transparent 68%);}
+  .services::before{right:-180px;top:80px}.why-us::before{left:-210px;top:40px}.sectors::before{right:-180px;bottom:-170px}
+
+  .faq-item p{max-height:0;opacity:0;overflow:hidden;padding-top:0;padding-bottom:0;transition:max-height .32s ease,opacity .24s ease,padding .32s ease;}
+  .faq-item[open] p{max-height:170px;opacity:1;padding-bottom:18px;}
+  .faq-item.is-closing p{max-height:0;opacity:0;padding-bottom:0;}
+
+  .contact-float{position:fixed;right:24px;bottom:24px;z-index:90;}
+  .contact-float summary{list-style:none;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--blue-600);color:#fff;box-shadow:0 14px 30px rgba(29,78,216,.3);font-size:22px;transition:.22s;}
+  .contact-float summary::-webkit-details-marker{display:none}.contact-float summary:hover{transform:translateY(-2px);box-shadow:0 17px 34px rgba(29,78,216,.38)}
+  .contact-menu{position:absolute;right:0;bottom:66px;width:190px;padding:9px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 45px -18px rgba(7,27,60,.38);display:grid;gap:5px;transform-origin:bottom right;animation:contact-in .2s ease;}
+  .contact-menu a{padding:11px 12px;border-radius:8px;font-size:12px;font-weight:700;color:var(--navy-900);background:#f7f9fd;transition:.2s}.contact-menu a:hover{background:var(--blue-50);color:var(--blue-600)}
+  @keyframes contact-in{from{opacity:0;transform:translateY(7px) scale(.97)}to{opacity:1;transform:none}}
+
+  /* ---------- Natural 100% layout sizing ---------- */
+  .hero{padding:12.5px 0 37.5px;}
+  .hero-grid{gap:40px;}
+  .hero-copy{padding-left:140px;}
+  .eyebrow{gap:10px;font-size:13.75px;letter-spacing:1.75px;margin-bottom:17.5px;}
+  .eyebrow .dot{width:5px;height:5px;}
+  .hero h1{font-size:52.5px;letter-spacing:-1.625px;margin-bottom:20px;}
+  .hero p.lead{font-size:18.125px;max-width:537.5px;margin-bottom:30px;}
+  .hero-ctas{gap:25px;margin-bottom:37.5px;}
+  .trusted-label{font-size:14.375px;margin-top:10px;margin-bottom:15px;}
+  .logos-row{gap:10px;max-width:600px;}
+  .integration-logo{height:60px;padding:7.5px;border-radius:16.25px;}
+
+  .hero-visual{height:650px;gap:15px;padding-top:20px;}
+  .hero-photo{right:-50px;top:20px;left:137.5px;border-radius:25px;box-shadow:0 28px 55px -35px rgba(11,31,77,.22);}
+  .float-card{width:265px;border-radius:16.625px;padding:19px 19px 37.5px;box-shadow:0 20px 42.5px -20px rgba(11,42,82,.2);}
+  .float-card .fc-icon{width:45px;height:45px;border-radius:12.5px;margin-bottom:13.75px;}
+  .float-card .fc-icon svg{width:22.5px;height:22.5px;}
+  .float-card h4{font-size:21.25px;margin-bottom:8.75px;letter-spacing:-.375px;}
+  .float-card p{font-size:14.375px;}
+  .float-card .fc-arrow{width:32.5px;height:32.5px;}
+  .float-card .fc-arrow svg{width:15px;height:15px;}
+  .fc-2{top:8.75px}.fc-3{top:17.5px;}
+  .stats-card{bottom:37.5px;width:265px;border-radius:20px;padding:25px 22.5px;}
+  .stats-card .sc-label{font-size:11.875px;letter-spacing:1.5px;margin-bottom:16.25px;}
+  .stat-row{gap:12.5px;padding:11.25px 0;}
+  .stat-row .si{width:35px;height:35px;border-radius:8.75px;}
+  .stat-row .si svg{width:17.5px;height:17.5px;}
+  .stat-row .sv{font-size:18.75px;}.stat-row .sl{font-size:13.125px;}
+
+  .metrics{border-radius:22.5px;margin-top:37.5px;padding:22.5px 12.5px;box-shadow:0 15px 35px -30px rgba(15,25,60,.12);}
+  .metric{gap:15px;padding:0 22.5px;}
+  .metric .mi{width:50px;height:50px;border-radius:12.5px;}
+  .metric .mi svg{width:23.75px;height:23.75px;}
+  .metric .mv{font-size:22.5px;letter-spacing:-.5px;}
+  .metric .ml{font-size:14.375px;margin-top:2.5px;}
+
+  .services{padding:80px 0 87.5px;background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);}
+  .sec-head{margin-bottom:40px;gap:25px;}
+  .sec-head h2{font-size:33.75px;letter-spacing:-1px;}
+  .sec-eyebrow{font-size:21.25px;letter-spacing:2.25px;margin-bottom:12.5px;}
+  .all-link{gap:10px;font-size:16.25px}.all-link svg{width:17.5px;height:17.5px;}
+  .service-grid{gap:22.5px;max-width:1450px;}
+  .service-card{border-radius:17.5px;padding:25px 22.5px;min-height:230px;}
+  .service-card .svi{width:47.5px;height:47.5px;border-radius:12.5px;margin-bottom:20px;}
+  .service-card .svi svg{width:23.75px;height:23.75px;}
+  .service-card h3{font-size:18.125px;margin-bottom:10px;letter-spacing:-.25px;}
+  .service-card p{font-size:15px;margin-bottom:17.5px;}
+  .card-link{gap:7.5px;font-size:15px}.card-link svg{width:16.25px;height:16.25px;}
+
+  .why-us{padding:80px 0 110px;background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);}
+  .why-section-label{margin-bottom:35px;}
+  .why-layout{gap:110px;max-width:1225px;}
+  .why-copy .sec-eyebrow{margin-bottom:17.5px;}
+  .why-copy h2{font-size:36.25px;letter-spacing:-1px;margin-bottom:22.5px;max-width:487.5px;}
+  .why-copy p{font-size:17.5px;max-width:487.5px;}
+  .why-grid{gap:12.5px;}
+  .why-card{min-height:67.5px;padding:20px 22.5px;border-radius:10px;}
+  .why-card h3{font-size:16.25px;}
+
+  .pricing{background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);padding:95px 0 115px;}
+  .pricing .sec-head{margin-bottom:42.5px;}
+  .pricing-grid{gap:20px;max-width:1400px;}
+  .price-card{min-height:500px;padding:31.25px 25px 25px;border-radius:15px;}
+  .price-badge{right:20px;top:20px;padding:6.25px 11.25px;border-radius:6.25px;font-size:11.25px;}
+  .price-card h3{font-size:25px;margin-bottom:15px;}
+  .price-intro{font-size:14.375px;min-height:60px;}
+  .price-divider{margin:21.25px 0 22.5px;}
+  .price-line{gap:7.5px;margin-bottom:27.5px;}
+  .price{font-size:31.25px;letter-spacing:-.875px;}
+  .price-period{font-size:13.75px;}
+  .price-features{margin-bottom:27.5px;gap:17.5px;}
+  .price-features li{padding-left:32.5px;font-size:14.375px;}
+  .price-features li::before{width:21.25px;height:21.25px;font-size:12.5px;}
+  .price-button{min-height:52.5px;padding:12.5px 17.5px;border-radius:8.75px;font-size:14.375px;}
+
+  .sectors{background:linear-gradient(180deg,var(--bg) 0%,#fbfcff 48%,var(--bg) 100%);padding:87.5px 0 105px;}
+  .sector-grid{gap:20px;}
+  .sector-card{border-radius:17.5px;padding:27.5px 25px;}
+  .sector-card h3{font-size:18.125px;margin-bottom:8.75px;}
+  .sector-card p{font-size:15px;}
+
+  .faq{padding:95px 0 105px;}
+  .faq-head{margin-bottom:42.5px;}
+  .faq-head h2{font-size:36.25px;letter-spacing:-1px;margin-bottom:12.5px;}
+  .faq-head p{font-size:16.25px;}
+  .faq-grid{gap:15px 20px;max-width:1225px;}
+  .faq-item{border-radius:11.25px;}
+  .faq-item summary{min-height:72.5px;padding:22.5px 67.5px 22.5px 22.5px;font-size:16.25px;}
+  .faq-item summary::after{right:21.25px;width:31.25px;height:31.25px;font-size:20px;}
+  .faq-item p{padding-left:22.5px;padding-right:67.5px;font-size:14.375px;}
+  .faq-item[open] p{max-height:212.5px;padding-bottom:22.5px;}
+
+  .cta-band{margin:87.5px auto 60px;max-width:1800px;padding:0 50px;}
+  .cta-inner{border-radius:27.5px;padding:60px 62.5px;gap:37.5px;}
+  .cta-inner::after{right:-100px;top:-100px;width:400px;height:400px;}
+  .cta-inner h2{font-size:30px;letter-spacing:-.75px;margin-bottom:10px;max-width:600px;}
+  .cta-inner p{font-size:16.875px;max-width:550px;}
+  .cta-form{width:425px;flex-basis:425px;padding:20px;border-radius:17.5px;gap:11.25px;}
+  .cta-form h3{font-size:17.5px;letter-spacing:-.25px;}
+  .cta-form input{height:50px;padding:0 15px;border-radius:10px;font-size:15px;}
+  .cta-form button{padding:13.75px 18.75px;font-size:15px;}
+  .form-status{padding:11.25px 12.5px;border-radius:10px;font-size:13.75px;}
+
+  footer{padding:27.5px 0 12.5px;background-size:42.5px 42.5px,42.5px 42.5px,100% 100%;}
+  .foot-grid{gap:90px;padding:0 25px 22.5px;}
+  .foot-brand .logo{padding:10px 17.5px;border-radius:10px;}
+  .foot-brand .logo-mark{width:60px;height:42.5px;}
+  .foot-brand .logo-text .name{font-size:22.5px;}.foot-brand .logo-text .tag{font-size:10px;}
+  .foot-brand p{font-size:16.25px;max-width:375px;margin-top:15px;}
+  footer h5{font-size:15.625px;margin-bottom:15px;}
+  footer ul{gap:10px;}footer a{font-size:16.25px;}
+  .footer-contact-list{gap:8.75px;margin-bottom:15px;}
+  .footer-contact-list a{gap:11.25px;font-size:16.25px;}
+  .footer-contact-list .contact-icon{width:21.25px;flex-basis:21.25px;}
+  .contact-detail{grid-template-columns:22.5px 1fr;gap:2.5px 10px;margin:10px 0;}
+  .contact-detail .detail-icon{font-size:16.25px;}.contact-detail strong{font-size:13.125px;}.contact-detail span{font-size:15.625px;}
+  .map-links{gap:10px;margin-top:13.75px;}.map-links a{padding:11.25px 16.25px;border-radius:7.5px;font-size:13.75px;}
+  .foot-bottom{padding-top:11.25px;font-size:14.375px;gap:3.75px;}.foot-bottom strong{font-size:15px;}
+
+  .reveal-pending{transform:translateY(22.5px);}
+  .services::before,.why-us::before,.sectors::before{width:525px;height:525px;filter:blur(15px);}
+  .services::before{right:-225px;top:100px}.why-us::before{left:-262.5px;top:50px}.sectors::before{right:-225px;bottom:-212.5px}
+
+  /* ---------- Fluid desktop: 1280px -> 1920px ---------- */
+  @media(min-width:1081px){
+    :root{--desktop-header-h:clamp(74px,calc(57px + 1.33vw),82.5px);}
+    body{padding-top:var(--desktop-header-h);}
+    header{height:var(--desktop-header-h);}
+    #services{scroll-margin-top:calc(var(--desktop-header-h) - 3px);}
+    #pricing,#why-us,#sectors,#faq,#final-cta,#contact{scroll-margin-top:var(--desktop-header-h);}
+    #services:target,#pricing:target,#why-us:target,#sectors:target,#faq:target{min-height:calc(100vh - var(--desktop-header-h));}
+
+    .wrap,body > header .wrap{
+      padding-left:clamp(32px,calc(-4px + 2.81vw),50px);
+      padding-right:clamp(32px,calc(-4px + 2.81vw),50px);
+    }
+    body > header .nav-inner > .logo{transform:translateX(clamp(32px,calc(-160px + 15vw),128px));}
+    body > header .logo{gap:clamp(10px,calc(5px + .39vw),12.5px);}
+    body > header .logo-mark{width:clamp(58px,calc(35.4px + 1.77vw),69.3px);height:clamp(40px,calc(25.5px + 1.13vw),47.25px);}
+    body > header .logo-text{height:clamp(40px,calc(25.5px + 1.13vw),47.25px);}
+    body > header .logo-text .name{font-size:clamp(26px,calc(15px + .86vw),31.5px);}
+    body > header nav.main-links{gap:clamp(20px,calc(-2px + 1.72vw),31px);}
+    body > header nav.main-links a{font-size:clamp(14px,calc(10px + .31vw),16px);padding:clamp(6px,calc(3px + .23vw),7.5px) 0;}
+    body > header .header-right{gap:clamp(18px,calc(-1px + 1.48vw),27.5px);}
+    body > header .phone{gap:clamp(8px,calc(4px + .31vw),10px);font-size:clamp(14px,calc(5.75px + .64vw),18.125px);}
+    body > header .phone svg{width:clamp(17px,calc(8.5px + .66vw),21.25px);height:clamp(17px,calc(8.5px + .66vw),21.25px);}
+    body > header .btn{gap:clamp(8px,calc(4px + .31vw),10px);font-size:clamp(14px,calc(5.75px + .64vw),18.125px);padding:clamp(12px,calc(6px + .47vw),15px) clamp(20px,calc(10px + .78vw),25px);border-radius:clamp(9px,calc(4.5px + .35vw),11.25px);}
+
+    .hero{padding:clamp(10px,calc(5px + .39vw),12.5px) 0 clamp(30px,calc(15px + 1.17vw),37.5px);}
+    .hero-grid{gap:clamp(32px,calc(16px + 1.25vw),40px);grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);}
+    .hero-copy{padding-left:clamp(82px,calc(-34px + 9.06vw),140px);min-width:0;}
+    .eyebrow{gap:clamp(8px,calc(4px + .31vw),10px);font-size:clamp(11px,calc(5.5px + .43vw),13.75px);letter-spacing:clamp(1.4px,calc(.7px + .055vw),1.75px);margin-bottom:clamp(14px,calc(7px + .55vw),17.5px);}
+    .hero h1{font-size:clamp(42px,calc(21px + 1.64vw),52.5px);letter-spacing:clamp(-1.625px,calc(-.975px - .034vw),-1.3px);margin-bottom:clamp(16px,calc(8px + .63vw),20px);}
+    .hero p.lead{font-size:clamp(14.5px,calc(7.25px + .57vw),18.125px);max-width:clamp(430px,calc(215px + 16.8vw),537.5px);margin-bottom:clamp(24px,calc(12px + .94vw),30px);}
+    .hero-ctas{gap:clamp(20px,calc(10px + .78vw),25px);margin-bottom:clamp(30px,calc(15px + 1.17vw),37.5px);}
+    .trusted-label{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);margin-top:clamp(8px,calc(4px + .31vw),10px);margin-bottom:clamp(12px,calc(6px + .47vw),15px);}
+    .logos-row{gap:clamp(8px,calc(4px + .31vw),10px);max-width:clamp(480px,calc(240px + 18.75vw),600px);}
+    .integration-logo{height:clamp(48px,calc(24px + 1.88vw),60px);padding:clamp(6px,calc(3px + .23vw),7.5px);border-radius:clamp(13px,calc(6.5px + .51vw),16.25px);}
+
+    .hero-visual{height:clamp(520px,calc(260px + 20.31vw),650px);gap:clamp(12px,calc(6px + .47vw),15px);padding-top:clamp(16px,calc(8px + .63vw),20px);min-width:0;}
+    .hero-photo{right:clamp(-50px,calc(2px - 2.71vw),-32px);top:clamp(16px,calc(8px + .63vw),20px);left:clamp(110px,calc(55px + 4.3vw),137.5px);border-radius:clamp(20px,calc(10px + .78vw),25px);}
+    .float-card{width:clamp(212px,calc(106px + 8.28vw),265px);border-radius:clamp(13.3px,calc(6.65px + .52vw),16.625px);padding:clamp(15.2px,calc(7.6px + .59vw),19px) clamp(15.2px,calc(7.6px + .59vw),19px) clamp(30px,calc(15px + 1.17vw),37.5px);}
+    .float-card .fc-icon{width:clamp(36px,calc(18px + 1.41vw),45px);height:clamp(36px,calc(18px + 1.41vw),45px);border-radius:clamp(10px,calc(5px + .39vw),12.5px);margin-bottom:clamp(11px,calc(5.5px + .43vw),13.75px);}
+    .float-card .fc-icon svg{width:clamp(18px,calc(9px + .7vw),22.5px);height:clamp(18px,calc(9px + .7vw),22.5px);}
+    .float-card h4{font-size:clamp(17px,calc(8.5px + .66vw),21.25px);margin-bottom:clamp(7px,calc(3.5px + .27vw),8.75px);}
+    .float-card p{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);}
+    .fc-2{top:clamp(7px,calc(3.5px + .27vw),8.75px)}.fc-3{top:clamp(14px,calc(7px + .55vw),17.5px)}
+
+    .metrics{border-radius:clamp(18px,calc(9px + .7vw),22.5px);margin-top:clamp(30px,calc(15px + 1.17vw),37.5px);padding:clamp(18px,calc(9px + .7vw),22.5px) clamp(10px,calc(5px + .39vw),12.5px);}
+    .metric{gap:clamp(12px,calc(6px + .47vw),15px);padding:0 clamp(18px,calc(9px + .7vw),22.5px);min-width:0;}
+    .metric .mi{width:clamp(40px,calc(20px + 1.56vw),50px);height:clamp(40px,calc(20px + 1.56vw),50px);border-radius:clamp(10px,calc(5px + .39vw),12.5px);flex:0 0 auto;}
+    .metric .mi svg{width:clamp(19px,calc(9.5px + .74vw),23.75px);height:clamp(19px,calc(9.5px + .74vw),23.75px);}
+    .metric .mv{font-size:clamp(18px,calc(9px + .7vw),22.5px);}.metric .ml{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);}
+
+    .services{padding:clamp(64px,calc(32px + 2.5vw),80px) 0 clamp(70px,calc(35px + 2.73vw),87.5px);}
+    .sec-head{margin-bottom:clamp(32px,calc(16px + 1.25vw),40px);gap:clamp(20px,calc(10px + .78vw),25px);}
+    .sec-head h2{font-size:clamp(27px,calc(13.5px + 1.05vw),33.75px);}.sec-eyebrow{font-size:clamp(17px,calc(8.5px + .66vw),21.25px);}
+    .service-grid{gap:clamp(18px,calc(9px + .7vw),22.5px);max-width:clamp(1160px,calc(580px + 45.31vw),1450px);}
+    .service-card{border-radius:clamp(14px,calc(7px + .55vw),17.5px);padding:clamp(20px,calc(10px + .78vw),25px) clamp(18px,calc(9px + .7vw),22.5px);min-height:clamp(184px,calc(92px + 7.19vw),230px);}
+    .service-card h3{font-size:clamp(14.5px,calc(7.25px + .57vw),18.125px);}.service-card p{font-size:clamp(12px,calc(6px + .47vw),15px);}.card-link{font-size:clamp(12px,calc(6px + .47vw),15px);}
+
+    .why-us{padding:clamp(64px,calc(32px + 2.5vw),80px) 0 clamp(88px,calc(44px + 3.44vw),110px);}
+    .why-layout{gap:clamp(72px,calc(-4px + 5.94vw),110px);max-width:clamp(980px,calc(490px + 38.28vw),1225px);}
+    .why-copy h2{font-size:clamp(29px,calc(14.5px + 1.13vw),36.25px);}.why-copy p{font-size:clamp(14px,calc(7px + .55vw),17.5px);}
+    .why-card{min-height:clamp(54px,calc(27px + 2.11vw),67.5px);padding:clamp(16px,calc(8px + .63vw),20px) clamp(18px,calc(9px + .7vw),22.5px);}.why-card h3{font-size:clamp(13px,calc(6.5px + .51vw),16.25px);}
+
+    .pricing{padding:clamp(76px,calc(38px + 2.97vw),95px) 0 clamp(92px,calc(46px + 3.59vw),115px);}
+    .pricing-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,calc(8px + .63vw),20px);max-width:clamp(1120px,calc(560px + 43.75vw),1400px);}
+    .price-card{min-height:clamp(400px,calc(200px + 15.63vw),500px);padding:clamp(25px,calc(12.5px + .98vw),31.25px) clamp(20px,calc(10px + .78vw),25px);}
+    .price-card h3{font-size:clamp(20px,calc(10px + .78vw),25px);}.price-intro{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);min-height:clamp(48px,calc(24px + 1.88vw),60px);}
+    .price{font-size:clamp(25px,calc(12.5px + .98vw),31.25px);}.price-features li{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);}.price-button{font-size:clamp(11.5px,calc(5.75px + .45vw),14.375px);}
+
+    .sectors{padding:clamp(70px,calc(35px + 2.73vw),87.5px) 0 clamp(84px,calc(42px + 3.28vw),105px);}.sector-card h3{font-size:clamp(14.5px,calc(7.25px + .57vw),18.125px);}.sector-card p{font-size:clamp(12px,calc(6px + .47vw),15px);}
+    .faq{padding:clamp(76px,calc(38px + 2.97vw),95px) 0 clamp(84px,calc(42px + 3.28vw),105px);}.faq-head h2{font-size:clamp(29px,calc(14.5px + 1.13vw),36.25px);}.faq-item summary{font-size:clamp(13px,calc(6.5px + .51vw),16.25px);}
+    .cta-band{margin:clamp(70px,calc(35px + 2.73vw),87.5px) auto clamp(48px,calc(24px + 1.88vw),60px);padding:0 clamp(32px,calc(-4px + 2.81vw),50px);}.cta-inner{padding:clamp(48px,calc(24px + 1.88vw),60px) clamp(50px,calc(25px + 1.95vw),62.5px);}.cta-form{width:clamp(340px,calc(170px + 13.28vw),425px);flex-basis:clamp(340px,calc(170px + 13.28vw),425px);}
+    .foot-grid{gap:clamp(64px,calc(12px + 4.06vw),90px);}.foot-brand p,footer a,.footer-contact-list a{font-size:clamp(13px,calc(6.5px + .51vw),16.25px);}
+  }
+
+  @media(max-width:1100px){
+    .pricing-grid{grid-template-columns:repeat(2,1fr);max-width:1040px;}
+  }
+  @media(max-width:1080px){
+    body > header .nav-inner > .logo{transform:none;}
+    body > header .wrap{padding-left:28px;padding-right:28px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-copy{padding-left:0;}
+    .hero h1{font-size:48px;}
+    .hero-visual{height:auto;margin-top:25px;padding-top:0;}
+    .hero-photo{position:relative;left:0;right:0;top:0;height:425px;border-radius:22.5px;}
+    .float-card{position:relative;top:auto!important;width:100%;margin-bottom:17.5px;}
+    .stats-card{position:relative;right:auto;bottom:auto;width:100%;margin-top:17.5px;}
+    .metrics{grid-template-columns:repeat(2,1fr);gap:30px 0;border-radius:20px;}
+    .metric{border-right:0;padding:0 10px;}
+    .service-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:900px){
+    .why-layout{grid-template-columns:1fr;gap:42.5px;max-width:none;}
+    .why-copy h2,.why-copy p{max-width:775px;}
+    .sector-grid{grid-template-columns:1fr 1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:52.5px}.foot-contact{grid-column:1/-1;}
+  }
+  @media(max-width:800px){
+    .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 32px;}
+    .cta-form{width:100%;flex-basis:auto;}
+  }
+  @media(max-width:760px){
+    body{padding-top:70px;}
+    header{height:70px;}
+    body > header .wrap{padding-left:18px;padding-right:18px;}
+    body > header .logo-mark{width:52px;height:36px;}
+    body > header .logo-text{height:36px;}
+    body > header .logo-text .name{font-size:24px;}
+    body > header .btn{font-size:14px;padding:10px 14px;}
+    .hero{padding-top:18px;}
+    .hero h1{font-size:40px;}
+    .hero p.lead{font-size:16px;}
+    .eyebrow{font-size:11px;letter-spacing:1.3px;flex-wrap:wrap;}
+    .metrics{grid-template-columns:1fr;gap:20px;}
+    .metric{padding:0 8px;}
+    .faq-grid{grid-template-columns:1fr;}
+    .faq{padding:72px 0 85px;}.faq-head h2{font-size:31px;}
+  }
+  @media(max-width:640px){
+    .wrap{padding-left:22px;padding-right:22px;}
+    .logos-row{grid-template-columns:repeat(2,1fr);max-width:none}.integration-logo{height:57.5px;}
+    .hero-photo{height:300px;}
+    .service-grid,.pricing-grid,.sector-grid{grid-template-columns:1fr;}
+    .service-card{min-height:0;}
+    .price-card{min-height:0;}
+    .services{padding:68px 0 74px}.why-us{padding:68px 0 82px}.pricing,.sectors{padding:72px 0 82px;}
+    .sec-head h2{font-size:29px}.sec-eyebrow{font-size:16px;}
+    .why-copy h2{font-size:30px;}
+    .cta-band{padding:0 22px;margin:65px auto 45px;}
+    .cta-inner{padding:36px 22px;border-radius:20px;}.cta-inner h2{font-size:26px;}
+    .foot-grid{grid-template-columns:1fr;padding-left:0;padding-right:0;gap:34px}.foot-contact{grid-column:auto;}
+  }
+  @media(max-width:480px){
+    body > header .header-right .btn{display:none;}
+    .hero h1{font-size:35px;}
+    .hero-copy{padding-top:6px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.float-card{animation:none}.reveal-pending{opacity:1;transform:none;transition:none}.hero-photo img{transition:none}.price-card.featured{transform:none}}
+  @media(max-width:760px){.contact-float{right:16px;bottom:16px}.price-card.featured{transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark"><img src="public/taxcore-logo-transparent.png" alt="TaxCore logotipi"></div>
+      <div class="logo-text">
+        <div class="name">TaxCore</div>
+      </div>
+    </a>
+    <nav class="main-links">
+      <a href="#" class="active">Bosh sahifa</a>
+      <a href="#services">Xizmatlar</a>
+      <a href="#pricing">Tariflar</a>
+      <a href="#sectors">Sohalar</a>
+      <a href="#faq">Savollar</a>
+      <a href="#final-cta">Aloqa</a>
+    </nav>
+    <div class="header-right">
+      <a class="phone" href="tel:+998978071121">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +998 97 807 11 21
+      </a>
+      <a href="#contact" class="btn btn-primary">
+        Konsultatsiya olish
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="site-scale">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">BUXGALTERIYA <span class="dot"></span> SOLIQLAR <span class="dot"></span> MOLIYAVIY MASLAHAT</div>
+        <h1>BUXGALTERIYA -<br><span class="accent">0 dan BALANSgacha</span></h1>
+        <p class="lead">Biz buxgalteriya hisobini yuritamiz, soliqlarni nazorat qilamiz va hisobotlarni o‘z vaqtida topshiramiz.</p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary">
+            Konsultatsiya olish
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="trusted-label">Integratsiyalashgan servislar</div>
+        <div class="logos-row">
+          <div class="integration-logo"><img src="public/integration-1c.png" alt="1C"></div>
+          <div class="integration-logo didox"><img src="public/integration-didox.png" alt="Didox"></div>
+          <div class="integration-logo"><img src="public/integration-soliq-servis.png" alt="Soliq Servis"></div>
+          <div class="integration-logo bank"><img src="public/integration-bank-client.png" alt="Bank Client"></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-photo">
+          <img src="public/taxcore-building.png" alt="Zamonaviy shisha biznes markazi">
+        </div>
+
+        <div class="float-card fc-1">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h1M14 8h1M9 12h1M14 12h1M9 16h1M14 16h1"/></svg>
+          </div>
+          <h4>Buxgalteriya xizmatlari</h4>
+          <p>To'liq va ishonchli hisob yuritish</p>
+        </div>
+
+        <div class="float-card fc-2">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h4>Audit xizmatlari</h4>
+          <p>Moliyaviy nazorat va xavflarni aniqlash</p>
+        </div>
+
+        <div class="float-card fc-3">
+          <div class="fc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="12" cy="16" r="2.3"/></svg>
+          </div>
+          <h4>Soliq maslahatlari</h4>
+          <p>Qonuniy optimallashtirish va xavfni kamaytirish</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="metrics wrap" style="max-width:1700px;">
+      <div class="metric">
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg></div>
+        <div><div class="mv">20+</div><div class="ml">Bizga ishongan kompaniya</div></div>
+      </div>
+      <div class="metric">
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="mv">5+</div><div class="ml">Tajribali mutaxassis</div></div>
+      </div>
+      <div class="metric">
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+        <div><div class="mv">50+</div><div class="ml">Muvaffaqiyatli loyihalar</div></div>
+      </div>
+      <div class="metric">
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9.5 13.5L7 22l5-3 5 3-2.5-8.5"/></svg></div>
+        <div><div class="mv">10+ yil</div><div class="ml">Buxgalterlik tajribasi</div></div>
+      </div>
+      <div class="metric">
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+        <div><div class="mv">Barcha sohalar</div><div class="ml">Har qanday biznes uchun</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow">Xizmatlarimiz</div>
+        <h2>Biz nima bilan yordam beramiz?</h2>
+      </div>
+    </div>
+
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h1M14 8h1M9 12h1M14 12h1M9 16h1M14 16h1"/></svg></div>
+        <h3>Buxgalteriya xizmatlari</h3>
+        <p>To'liq va ishonchli buxgalteriya hisobi yuritish, 1C support va hisobotlar.</p>
+        <a href="#" class="card-link" data-service="accounting">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="12" cy="16" r="2.3"/></svg></div>
+        <h3>Soliq maslahatlari</h3>
+        <p>Soliq rejalashtirish, optimallashtirish va soliq xavflarini kamaytirish.</p>
+        <a href="#" class="card-link" data-service="tax">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+        <h3>Moliyaviy boshqaruv</h3>
+        <p>Moliyaviy tahlil, budjetlashtirish va cash-flow boshqaruvi.</p>
+        <a href="#" class="card-link" data-service="finance">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Audit xizmatlari</h3>
+        <p>Moliyaviy audit, soliq auditi va ichki nazorat tizimlarini baholash.</p>
+        <a href="#" class="card-link" data-service="audit">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3a2 2 0 0 0-2-1h-2a2 2 0 0 0-2 1M9 7V5a2 2 0 0 1 2-2h2"/></svg></div>
+        <h3>Yuridik qo'llab-quvvatlash</h3>
+        <p>Korxona ro'yxatdan o'tkazish, shartnoma va huquqiy masalalar.</p>
+        <a href="#" class="card-link" data-service="legal">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="svi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 11h5M18.5 8.5v5"/></svg></div>
+        <h3>Kadrlar va ish haqi hisobi</h3>
+        <p>Xodimlar hujjatlari, ish haqi, ta'til va majburiy ajratmalar hisobi.</p>
+        <a href="#" class="card-link" data-service="payroll">Batafsil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why-us" id="why-us">
+  <div class="wrap">
+    <div class="why-section-label">
+      <div class="sec-eyebrow">Bizning ustunliklarimiz</div>
+    </div>
+    <div class="why-layout">
+      <div class="why-copy">
+        <h2>Nega aynan biz?</h2>
+        <p>Biz moliyaviy jarayonlaringizni tartibga solib, xavflarni kamaytiramiz va rahbarning asosiy biznes vazifalariga ko'proq vaqt ajratishiga yordam beramiz.</p>
+      </div>
+      <div class="why-grid">
+        <article class="why-card"><h3>Hisobotlar muddatida topshiriladi</h3></article>
+        <article class="why-card"><h3>Soliq xavflari kamayadi</h3></article>
+        <article class="why-card"><h3>Rahbar vaqtini tejaydi</h3></article>
+        <article class="why-card"><h3>Hujjatlar tartibga keltiriladi</h3></article>
+        <article class="why-card"><h3>Elektron tizimlar sozlanadi</h3></article>
+        <article class="why-card"><h3>Oylik doimiy xizmat yoki bir martalik yordam</h3></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow">Tariflar</div>
+        <h2>Biznesingizga mos xizmat paketini tanlang</h2>
+      </div>
+    </div>
+    <div class="pricing-grid">
+      <article class="price-card">
+        <h3>Start</h3>
+        <p class="price-intro">Aylanmadan olinadigan soliq to'lovchi kichik korxonalar uchun.</p>
+        <div class="price-divider"></div>
+        <div class="price-line"><div class="price">1 000 000 so'm</div><div class="price-period">/ oy</div></div>
+        <ul class="price-features">
+          <li>Hodimlar soni 4 tagacha</li>
+          <li>Oylik operatsiyalar soni 30 tagacha</li>
+          <li>Aylanmadan olinadigan soliq to'lovchi korxonalar uchun</li>
+        </ul>
+        <a href="#contact" class="price-button">Mutaxassis bilan gaplashish</a>
+      </article>
+      <article class="price-card">
+        <h3>Standart</h3>
+        <p class="price-intro">Operatsiyalari ko'proq bo'lgan kichik bizneslar uchun.</p>
+        <div class="price-divider"></div>
+        <div class="price-line"><div class="price">1 500 000 so'm</div><div class="price-period">/ oy</div></div>
+        <ul class="price-features">
+          <li>Hodimlar soni 4 tagacha</li>
+          <li>Oylik operatsiyalar soni 100 tagacha</li>
+          <li>Aylanmadan olinadigan soliq to'lovchi korxonalar uchun</li>
+        </ul>
+        <a href="#contact" class="price-button">Mutaxassis bilan gaplashish</a>
+      </article>
+      <article class="price-card featured">
+        <span class="price-badge">Eng ko'p tanlanadi</span>
+        <h3>Business</h3>
+        <p class="price-intro">QQS to'lovchi va muntazam operatsiyali korxonalar uchun.</p>
+        <div class="price-divider"></div>
+        <div class="price-line"><div class="price">3 000 000 so'm</div><div class="price-period">/ oy</div></div>
+        <ul class="price-features">
+          <li>Hodimlar soni 4 tadan 10 nafargacha</li>
+          <li>Kunlik operatsiyalar 5 tagacha</li>
+          <li>QQS solig'i to'lovchisi bo'lgan korxonalar uchun</li>
+        </ul>
+        <a href="#contact" class="price-button">Mutaxassis bilan gaplashish</a>
+      </article>
+      <article class="price-card">
+        <h3>Pro</h3>
+        <p class="price-intro">Katta jamoa va faol hujjat aylanishiga ega bizneslar uchun.</p>
+        <div class="price-divider"></div>
+        <div class="price-line"><div class="price">5 500 000 so'm</div><div class="price-period">/ oy</div></div>
+        <ul class="price-features">
+          <li>Hodimlar soni 10 tadan 50 nafargacha</li>
+          <li>Kunlik operatsiyalar 20 tagacha</li>
+          <li>QQS solig'i to'lovchisi bo'lgan korxonalar uchun</li>
+        </ul>
+        <a href="#contact" class="price-button">Mutaxassis bilan gaplashish</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sectors" id="sectors">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow">Sohalar</div>
+        <h2>Har qanday biznes yo'nalishi uchun tajriba</h2>
+      </div>
+    </div>
+    <div class="sector-grid">
+      <div class="sector-card">
+        <h3>Savdo va chakana</h3>
+        <p>Ombor, kassa va marketpleys operatsiyalari bo'yicha hisob-kitob yechimlari.</p>
+      </div>
+      <div class="sector-card">
+        <h3>Ishlab chiqarish</h3>
+        <p>Tannarx hisobi, ishlab chiqarish sikli va soliq yengilliklaridan foydalanish.</p>
+      </div>
+      <div class="sector-card">
+        <h3>IT va startaplar</h3>
+        <p>IT Park rezidentligi, xalqaro to'lovlar va investorlar uchun hisobotlar.</p>
+      </div>
+      <div class="sector-card">
+        <h3>Qurilish</h3>
+        <p>Loyiha bo'yicha hisob, pudratchilar bilan hisob-kitob va smeta nazorati.</p>
+      </div>
+      <div class="sector-card">
+        <h3>Logistika</h3>
+        <p>Xalqaro yuk tashish, bojxona va valyuta operatsiyalari bo'yicha maslahat.</p>
+      </div>
+      <div class="sector-card">
+        <h3>Xizmat ko'rsatish</h3>
+        <p>Kichik va o'rta biznes uchun soddalashtirilgan soliq va hisob yechimlari.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="faq-head">
+      <div class="sec-eyebrow">Savol va javoblar</div>
+      <h2>Ko'p so'raladigan savollar</h2>
+      <p>Buxgalteriya, soliq, tariflar va hamkorlik jarayoni bo'yicha qisqa javoblar.</p>
+    </div>
+    <div class="faq-grid">
+      <details class="faq-item">
+        <summary>Biznesim uchun qaysi tarif mosligini qanday bilaman?</summary>
+        <p>Mutaxassisimiz xodimlar soni, soliq turi va operatsiyalar hajmini o'rganib, sizga ortiqcha xarajatsiz eng mos tarifni tavsiya qiladi.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Hisobotlarni to'liq siz topshirasizmi?</summary>
+        <p>Ha, tanlangan xizmat paketiga muvofiq soliq va moliyaviy hisobotlarni tayyorlaymiz, tekshiramiz va belgilangan muddatlarda topshiramiz.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Oldingi davrdagi buxgalteriya xatolarini tuzatasizmi?</summary>
+        <p>Ha. Dastlab hujjatlar va hisobotlarni audit qilamiz, kamchiliklarni aniqlaymiz va bosqichma-bosqich tartibga keltiramiz.</p>
+      </details>
+      <details class="faq-item">
+        <summary>QQS to'lovchi korxonalar bilan ishlaysizmi?</summary>
+        <p>Ha, QQS hisobi, elektron hisob-fakturalar, kontragentlar nazorati va soliq hisobotlari bo'yicha to'liq xizmat ko'rsatamiz.</p>
+      </details>
+      <details class="faq-item">
+        <summary>1C, Didox va soliq kabinetini sozlab berasizmi?</summary>
+        <p>Ha, elektron tizimlarni sozlash, ma'lumotlarni kiritish va xodimlarga ulardan foydalanish bo'yicha amaliy yordam beramiz.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Ma'lumotlarimiz maxfiyligi qanday ta'minlanadi?</summary>
+        <p>Mijoz ma'lumotlari faqat vakolatli mutaxassislar tomonidan ishlatiladi va hamkorlik davomida qat'iy maxfiylik talablari asosida himoyalanadi.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Xizmatni bir martalik buyurtma qilish mumkinmi?</summary>
+        <p>Ha, doimiy abonent xizmatidan tashqari audit, hisobotni tiklash, konsultatsiya va tizim sozlash kabi bir martalik xizmatlar ham mavjud.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Hamkorlikni boshlash uchun nima qilish kerak?</summary>
+        <p>Konsultatsiyaga ariza qoldiring. Mutaxassisimiz siz bilan bog'lanib, vazifalarni aniqlaydi va xizmat rejasi hamda narxini taqdim etadi.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+ <section class="cta-band" id="final-cta" aria-label="Yakuniy konsultatsiya chaqiruvi">
+  <div class="cta-inner">
+    <div>
+      <h2>Buxgalteriyani bizga topshiring — biznesingizga e’tibor qarating</h2>
+      <p>Hisob, soliq va hisobotlarni mutaxassislarimizga ishonib topshiring. Bepul dastlabki konsultatsiya uchun bog‘laning.</p>
+    </div>
+    <form class="cta-form" id="consultation-form">
+      <h3>Bepul konsultatsiyaga yoziling</h3>
+      <input type="text" name="name" placeholder="Ismingiz" aria-label="Ismingiz" required>
+      <input type="tel" name="phone" placeholder="+998 90 123 45 67" aria-label="Telefon raqamingiz" required>
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
+      <button type="submit" class="btn btn-primary">Ariza yuborish</button>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">
+          <div class="logo-mark"><img src="public/taxcore-logo-transparent.png" alt="TaxCore logotipi"></div>
+          <div class="logo-text">
+            <div class="name" style="color:#fff;">TaxCore</div>
+            <div class="tag" style="color:#93a3cf;">FINANCIAL &amp; TAX ADVISORY</div>
+          </div>
+        </div>
+        <p>Buxgalteriya, soliq va moliyaviy maslahat xizmatlari — biznesingiz uchun aniq hisob va ishonchli strategiya.</p>
+      </div>
+      <div>
+        <h5>Tezkor havolalar</h5>
+        <ul>
+          <li><a href="#">Bosh sahifa</a></li>
+          <li><a href="#services">Xizmatlar</a></li>
+          <li><a href="#pricing">Tariflar</a></li>
+          <li><a href="#why-us">Nega aynan biz?</a></li>
+          <li><a href="#sectors">Sohalar</a></li>
+          <li><a href="#faq">Ko‘p so‘raladigan savollar</a></li>
+        </ul>
+      </div>
+      <div class="foot-contact">
+        <h5>Aloqa</h5>
+        <div class="footer-contact-list">
+          <a href="tel:+998978071121"><span class="contact-icon">☎</span><span>+998 97 807 11 21</span></a>
+          <a href="mailto:taxcoreuz@gmail.com"><span class="contact-icon">✉</span><span>taxcoreuz@gmail.com</span></a>
+          <a href="https://t.me/taxcoreuz" target="_blank" rel="noopener"><span class="contact-icon">✈</span><span>@taxcoreuz</span></a>
+        </div>
+        <div class="contact-detail">
+          <span class="detail-icon">◷</span><strong>Ish vaqti</strong><span>Dushanba – Shanba, 09:00 – 18:00</span>
+        </div>
+        <div class="contact-detail">
+          <span class="detail-icon">●</span><strong>Manzil</strong><span>Toshkent shahri, Yunusobod tumani</span>
+        </div>
+        <div class="map-links">
+          <a href="https://maps.google.com/?q=Yunusobod,Toshkent" target="_blank" rel="noopener">Google Maps</a>
+          <a href="https://yandex.uz/maps/?text=Yunusobod%20Toshkent" target="_blank" rel="noopener">Yandex Maps</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <strong>© 2026 TAXCORE — Moliyaviy aniqlik va ishonchli maslahat</strong>
+      <span>Barcha huquqlar himoyalangan</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<dialog class="service-modal" id="service-modal" aria-labelledby="service-modal-title">
+  <div class="service-modal-head">
+    <h3 id="service-modal-title"></h3>
+    <p class="service-modal-intro" id="service-modal-intro"></p>
+    <button class="service-modal-close" type="button" aria-label="Oynani yopish">×</button>
+  </div>
+  <div class="service-modal-body">
+    <h4>Xizmat tarkibiga nimalar kiradi?</h4>
+    <ul class="service-modal-list" id="service-modal-list"></ul>
+    <div class="service-modal-result" id="service-modal-result"></div>
+    <div class="service-modal-actions">
+      <a href="#final-cta" class="btn btn-primary service-modal-cta">Konsultatsiya olish</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  (() => {
+    const pageRoot = document.documentElement;
+    if (pageRoot.classList.contains('restoring-anchor')) {
+      const initialHash = window.__taxcoreInitialHash || location.hash;
+      const previousScrollRestoration = window.__taxcorePreviousScrollRestoration ?? null;
+      const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+      const restoreInitialAnchor = async () => {
+        if (document.fonts?.ready) await document.fonts.ready;
+        const anchorId = decodeURIComponent(initialHash.slice(1));
+        const target = document.getElementById(anchorId);
+        const previousBehavior = pageRoot.style.scrollBehavior;
+        pageRoot.style.scrollBehavior = 'auto';
+        if (target) {
+          for (let pass = 0; pass < 3; pass += 1) {
+            const offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+            const targetTop = window.scrollY + target.getBoundingClientRect().top - offset;
+            window.scrollTo(0, Math.max(0, targetTop));
+            await nextFrame();
+          }
+        }
+        try {
+          const restoredUrl = new URL(location.href);
+          restoredUrl.hash = initialHash;
+          history.replaceState(history.state, '', restoredUrl.href);
+        } catch (error) {}
+        await nextFrame();
+        pageRoot.style.scrollBehavior = previousBehavior;
+        pageRoot.classList.remove('restoring-anchor');
+        if (previousScrollRestoration !== null) history.scrollRestoration = previousScrollRestoration;
+      };
+      if (document.readyState === 'complete') restoreInitialAnchor();
+      else window.addEventListener('load', restoreInitialAnchor, { once: true });
+      setTimeout(() => pageRoot.classList.remove('restoring-anchor'), 3000);
+    }
+
+    const header = document.querySelector('body > header');
+    const navLinks = [...document.querySelectorAll('nav.main-links a')];
+    const sectionLinks = navLinks.filter(link => link.getAttribute('href')?.startsWith('#') && link.getAttribute('href').length > 1);
+    const surfaceClasses = ['surface-hero','surface-white','surface-soft'];
+    const surfaceBySection = {
+      services: 'surface-soft',
+      pricing: 'surface-soft',
+      sectors: 'surface-soft',
+      faq: 'surface-soft',
+      contact: 'surface-soft'
+    };
+    const serviceDetails = {
+      accounting: {
+        title: 'Buxgalteriya xizmatlari',
+        intro: 'Korxonangizning kundalik hisobini qonunchilik talablariga muvofiq yuritamiz va hisobotlarni belgilangan muddatlarda topshiramiz.',
+        items: ['Boshlang‘ich hujjatlarni tekshirish va qayta ishlash','Bank, kassa va hisob-kitob operatsiyalarini yuritish','1C tizimida buxgalteriya hisobini shakllantirish','Soliq va moliyaviy hisobotlarni tayyorlash','Elektron hisob-faktura hamda dalolatnomalarni yuritish','Kontragentlar bilan o‘zaro hisob-kitoblarni solishtirish'],
+        result: '<strong>Natija:</strong> tartibli hisob, o‘z vaqtida topshirilgan hisobotlar va biznes holatini ko‘rsatadigan ishonchli moliyaviy ma’lumotlar.'
+      },
+      tax: {
+        title: 'Soliq maslahatlari',
+        intro: 'Amaldagi qonunchilik asosida soliq yukini tahlil qilamiz, xavflarni oldindan aniqlaymiz va qonuniy yechimlarni taklif etamiz.',
+        items: ['Biznes uchun maqbul soliq rejimini tanlash','Soliq hisob-kitoblarini tekshirish','Soliq xavflari va ortiqcha to‘lovlarni aniqlash','Qonuniy soliq rejalashtirish bo‘yicha tavsiyalar','Soliq organlarining talabnomalariga javob tayyorlash','Soliq tekshiruvlariga tayyorgarlik ko‘rish'],
+        result: '<strong>Natija:</strong> nazorat qilinadigan soliq majburiyatlari, kamaytirilgan xavflar va asoslangan boshqaruv qarorlari.'
+      },
+      finance: {
+        title: 'Moliyaviy boshqaruv',
+        intro: 'Rahbar uchun tushunarli moliyaviy tizim yaratib, pul oqimi, xarajatlar va rentabellikni doimiy nazoratga olamiz.',
+        items: ['Daromad va xarajatlar budjetini tuzish','Pul oqimini rejalashtirish va nazorat qilish','Reja va amaldagi natijalarni taqqoslash','Mahsulot yoki yo‘nalishlar rentabelligini tahlil qilish','Boshqaruv hisobotlarini tayyorlash','To‘lov kalendari va moliyaviy prognoz tuzish'],
+        result: '<strong>Natija:</strong> pul oqimining shaffofligi, rejalashtirilgan xarajatlar va raqamlarga asoslangan biznes boshqaruvi.'
+      },
+      audit: {
+        title: 'Audit xizmatlari',
+        intro: 'Hisob va hujjatlardagi xatolarni tekshiramiz, moliyaviy hamda soliq xavflarini aniqlab, ularni bartaraf etish rejasini beramiz.',
+        items: ['Buxgalteriya hisobining holatini tekshirish','Soliq hisoboti va hisob-kitoblarini audit qilish','Birlamchi hujjatlardagi kamchiliklarni aniqlash','Ichki nazorat jarayonlarini baholash','Debitor va kreditor qarzdorlikni tekshirish','Aniq tavsiyalar bilan yakuniy audit xulosasini tayyorlash'],
+        result: '<strong>Natija:</strong> aniqlangan kamchiliklar ro‘yxati, xavflarni kamaytirish rejasi va tekshiruvlarga tayyor hisob tizimi.'
+      },
+      legal: {
+        title: 'Yuridik qo‘llab-quvvatlash',
+        intro: 'Biznes faoliyatiga oid huquqiy jarayonlarni tartibga solamiz va kundalik operatsiyalarda yuzaga keladigan yuridik masalalarni hal qilamiz.',
+        items: ['Korxonani ro‘yxatdan o‘tkazish va qayta tashkil etish','Ta’sis va korporativ hujjatlarni tayyorlash','Shartnomalarni tuzish va huquqiy ekspertiza qilish','Kontragentlar bo‘yicha huquqiy xavflarni baholash','Talabnoma va rasmiy javoblarni tayyorlash','Mehnat hamda xo‘jalik masalalari bo‘yicha maslahat berish'],
+        result: '<strong>Natija:</strong> tartibli hujjatlar, himoyalangan kelishuvlar va biznes faoliyatidagi huquqiy xavflarning kamayishi.'
+      },
+      payroll: {
+        title: 'Kadrlar va ish haqi hisobi',
+        intro: 'Xodimlar hujjatlari va ish haqi hisobini to‘liq yuritib, mehnat hamda soliq talablari bo‘yicha majburiyatlarni nazorat qilamiz.',
+        items: ['Ishga qabul qilish va bo‘shatish hujjatlarini rasmiylashtirish','Ish haqi, bonus va ushlanmalarni hisoblash','Ta’til va vaqtincha mehnatga layoqatsizlik hisoblari','JShDS hamda ijtimoiy soliqni hisoblash','Shtat jadvali va ish vaqti tabelini yuritish','Kadrlar va ish haqi bo‘yicha hisobotlarni tayyorlash'],
+        result: '<strong>Natija:</strong> to‘g‘ri hisoblangan ish haqi, tartibli kadrlar hujjatlari va xodimlar bo‘yicha kamaytirilgan xavflar.'
+      }
+    };
+    const setHeaderSurface = surface => {
+      if (!header) return;
+      header.classList.remove(...surfaceClasses);
+      header.classList.add(surface || 'surface-hero');
+    };
+    setHeaderSurface('surface-hero');
+
+    const updateHeader = () => {
+      header?.classList.toggle('is-scrolled', window.scrollY > 50);
+      if (window.scrollY < 260) {
+        setHeaderSurface('surface-hero');
+        navLinks.forEach((link, index) => link.classList.toggle('active', index === 0));
+      }
+    };
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+
+    const tracked = sectionLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    if ('IntersectionObserver' in window) {
+      const navObserver = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        setHeaderSurface(surfaceBySection[visible.target.id]);
+        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + visible.target.id));
+      }, { rootMargin: '-22% 0px -58% 0px', threshold: [0, .15, .4] });
+      tracked.forEach(section => navObserver.observe(section));
+
+      const revealItems = [...document.querySelectorAll('.service-card,.price-card,.why-card')];
+      revealItems.forEach((item, index) => {
+        item.classList.add('reveal-pending');
+        item.style.setProperty('--reveal-delay', `${(index % 6) * 55}ms`);
+      });
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -5% 0px' });
+      revealItems.forEach(item => revealObserver.observe(item));
+    }
+
+    const heroVisual = document.querySelector('.hero-visual');
+    const heroImage = document.querySelector('.hero-photo img');
+    if (heroVisual && heroImage && matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+      heroVisual.addEventListener('mousemove', event => {
+        const rect = heroVisual.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - .5) * 8;
+        const y = ((event.clientY - rect.top) / rect.height - .5) * 6;
+        heroImage.style.setProperty('--hero-x', `${x}px`);
+        heroImage.style.setProperty('--hero-y', `${y}px`);
+      });
+      heroVisual.addEventListener('mouseleave', () => {
+        heroImage.style.setProperty('--hero-x', '0px');
+        heroImage.style.setProperty('--hero-y', '0px');
+      });
+    }
+
+    const serviceModal = document.querySelector('#service-modal');
+    const serviceModalTitle = document.querySelector('#service-modal-title');
+    const serviceModalIntro = document.querySelector('#service-modal-intro');
+    const serviceModalList = document.querySelector('#service-modal-list');
+    const serviceModalResult = document.querySelector('#service-modal-result');
+    let serviceModalTrigger = null;
+
+    const closeServiceModal = () => {
+      if (!serviceModal?.open) return;
+      serviceModal.close();
+      serviceModalTrigger?.focus();
+    };
+
+    document.querySelectorAll('.card-link[data-service]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const detail = serviceDetails[link.dataset.service];
+        if (!detail || !serviceModal) return;
+        serviceModalTrigger = link;
+        serviceModalTitle.textContent = detail.title;
+        serviceModalIntro.textContent = detail.intro;
+        serviceModalList.replaceChildren(...detail.items.map(text => {
+          const item = document.createElement('li');
+          item.textContent = text;
+          return item;
+        }));
+        serviceModalResult.innerHTML = detail.result;
+        serviceModal.showModal();
+      });
+    });
+
+    serviceModal?.querySelector('.service-modal-close')?.addEventListener('click', closeServiceModal);
+    serviceModal?.querySelector('.service-modal-cta')?.addEventListener('click', () => serviceModal.close());
+    serviceModal?.addEventListener('click', event => {
+      if (event.target === serviceModal) closeServiceModal();
+    });
+
+    const consultationForm = document.querySelector('#consultation-form');
+    consultationForm?.addEventListener('submit', async event => {
+      event.preventDefault();
+      const data = new FormData(consultationForm);
+      const name = String(data.get('name') || '').trim();
+      const phone = String(data.get('phone') || '').trim();
+      const honey = String(data.get('_honey') || '').trim();
+      const button = consultationForm.querySelector('button[type="submit"]');
+      const status = consultationForm.querySelector('.form-status');
+      if (honey) return;
+
+      button.disabled = true;
+      button.textContent = 'Yuborilmoqda...';
+      status.className = 'form-status';
+      status.textContent = '';
+
+      try {
+        const response = await fetch('https://formsubmit.co/ajax/taxcoreuz@gmail.com', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json','Accept': 'application/json'},
+          body: JSON.stringify({
+            Ism: name,
+            Telefon: phone,
+            Manba: 'taxcore.uz sayti',
+            _subject: 'TaxCore — yangi konsultatsiya arizasi',
+            _template: 'table'
+          })
+        });
+        if (!response.ok) throw new Error('FormSubmit request failed');
+        const result = await response.json();
+        if (result.success === false || result.success === 'false') throw new Error('FormSubmit rejected submission');
+        consultationForm.reset();
+        status.textContent = 'Arizangiz yuborildi. Tez orada siz bilan bog‘lanamiz.';
+        status.classList.add('success');
+      } catch (error) {
+        status.textContent = 'Arizani yuborib bo‘lmadi. Iltimos, birozdan keyin qayta urinib ko‘ring.';
+        status.classList.add('error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Ariza yuborish';
+      }
+    });
+
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const summary = item.querySelector('summary');
+      summary.addEventListener('click', event => {
+        event.preventDefault();
+        if (item.open) {
+          item.classList.add('is-closing');
+          setTimeout(() => { item.open = false; item.classList.remove('is-closing'); }, 300);
+        } else {
+          item.open = true;
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
