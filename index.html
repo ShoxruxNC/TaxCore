@@ -929,8 +929,20 @@
       -webkit-overflow-scrolling:touch;align-items:flex-start;
     }
     .service-grid::-webkit-scrollbar,.why-grid::-webkit-scrollbar{display:none;}
-    .service-grid .service-card,.why-grid .why-card{
-      flex:0 0 100%;width:100%;height:auto;max-height:none;
+    .service-grid .service-card{
+      flex:0 0 calc((100% - .875rem)/2);width:calc((100% - .875rem)/2);
+      height:auto;max-height:none;min-height:15rem;padding:1rem .85rem;
+      scroll-snap-align:none;
+    }
+    .service-grid .service-card h3{font-size:.9rem;line-height:1.3;}
+    .service-grid .service-card p{font-size:.78rem;line-height:1.5;}
+    .why-grid .why-card{
+      flex:0 0 calc((100% - 1.75rem)/3);width:calc((100% - 1.75rem)/3);
+      height:auto;max-height:none;min-height:7.5rem;padding:.75rem .65rem;
+      scroll-snap-align:none;
+    }
+    .why-grid .why-card h3{font-size:.75rem;line-height:1.35;}
+    .service-grid .carousel-page-start,.why-grid .carousel-page-start{
       scroll-snap-align:start;scroll-snap-stop:always;
     }
     .pricing-grid{
@@ -1159,12 +1171,9 @@
       </div>
     </div>
     <div class="service-dots" aria-label="Xizmat slaydlari">
-      <button class="carousel-dot active" type="button" data-slide="0" aria-label="1-xizmat" aria-current="true"></button>
-      <button class="carousel-dot" type="button" data-slide="1" aria-label="2-xizmat" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="2" aria-label="3-xizmat" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="3" aria-label="4-xizmat" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="4" aria-label="5-xizmat" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="5" aria-label="6-xizmat" aria-current="false"></button>
+      <button class="carousel-dot active" type="button" data-slide="0" aria-label="1–2-xizmatlar" aria-current="true"></button>
+      <button class="carousel-dot" type="button" data-slide="1" aria-label="3–4-xizmatlar" aria-current="false"></button>
+      <button class="carousel-dot" type="button" data-slide="2" aria-label="5–6-xizmatlar" aria-current="false"></button>
     </div>
   </div>
 </section>
@@ -1189,12 +1198,8 @@
       </div>
     </div>
     <div class="why-dots" aria-label="Ustunlik slaydlari">
-      <button class="carousel-dot active" type="button" data-slide="0" aria-label="1-ustunlik" aria-current="true"></button>
-      <button class="carousel-dot" type="button" data-slide="1" aria-label="2-ustunlik" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="2" aria-label="3-ustunlik" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="3" aria-label="4-ustunlik" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="4" aria-label="5-ustunlik" aria-current="false"></button>
-      <button class="carousel-dot" type="button" data-slide="5" aria-label="6-ustunlik" aria-current="false"></button>
+      <button class="carousel-dot active" type="button" data-slide="0" aria-label="1–3-ustunliklar" aria-current="true"></button>
+      <button class="carousel-dot" type="button" data-slide="1" aria-label="4–6-ustunliklar" aria-current="false"></button>
     </div>
   </div>
 </section>
@@ -1559,11 +1564,15 @@
     window.addEventListener('resize', syncPricingDots, { passive: true });
     syncPricingDots();
 
-    const setupMobileSwipeCarousel = (carouselSelector, cardSelector, dotsSelector) => {
+    const setupMobileSwipeCarousel = (carouselSelector, cardSelector, dotsSelector, itemsPerView) => {
       const carousel = document.querySelector(carouselSelector);
-      const cards = [...document.querySelectorAll(cardSelector)];
+      const cards = [...document.querySelectorAll(cardSelector)]
+        .map((card, index) => ({ card, index, order: Number.parseInt(getComputedStyle(card).order, 10) || 0 }))
+        .sort((a, b) => a.order - b.order || a.index - b.index)
+        .map(item => item.card);
       const dots = [...document.querySelectorAll(`${dotsSelector} .carousel-dot`)];
       if (!carousel || !cards.length || !dots.length) return;
+      cards.forEach((card, index) => card.classList.toggle('carousel-page-start', index % itemsPerView === 0));
       let frame = 0;
       const syncDots = () => {
         if (!mobilePricing.matches) return;
@@ -1573,8 +1582,9 @@
           const bestDistance = Math.abs(cards[bestIndex].getBoundingClientRect().left - carouselLeft);
           return currentDistance < bestDistance ? index : bestIndex;
         }, 0);
+        const activePage = Math.min(dots.length - 1, Math.round(activeIndex / itemsPerView));
         dots.forEach((dot, index) => {
-          const active = index === activeIndex;
+          const active = index === activePage;
           dot.classList.toggle('active', active);
           dot.setAttribute('aria-current', String(active));
         });
@@ -1584,7 +1594,8 @@
         frame = requestAnimationFrame(syncDots);
       }, { passive: true });
       dots.forEach((dot, index) => dot.addEventListener('click', () => {
-        const card = cards[index];
+        const card = cards[index * itemsPerView];
+        if (!card) return;
         const left = carousel.scrollLeft + card.getBoundingClientRect().left - carousel.getBoundingClientRect().left;
         carousel.scrollTo({ left, behavior: 'smooth' });
       }));
@@ -1592,8 +1603,8 @@
       window.addEventListener('resize', syncDots, { passive: true });
       syncDots();
     };
-    setupMobileSwipeCarousel('.service-grid', '.service-grid .service-card', '.service-dots');
-    setupMobileSwipeCarousel('.why-grid', '.why-grid .why-card', '.why-dots');
+    setupMobileSwipeCarousel('.service-grid', '.service-grid .service-card', '.service-dots', 2);
+    setupMobileSwipeCarousel('.why-grid', '.why-grid .why-card', '.why-dots', 3);
 
     const surfaceClasses = ['surface-hero','surface-white','surface-soft'];
     const surfaceBySection = {
